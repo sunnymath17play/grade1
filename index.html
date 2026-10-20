@@ -255,7 +255,7 @@ function genCount(){
   const cells=sample(range(0,19),n);
   const items=cells.map(c=>{ const col=c%5,row=Math.floor(c/5);
     return `<span style="left:${12+col*56+rnd(-6,6)}px;top:${8+row*47+rnd(-4,4)}px">${em}</span>`; }).join('');
-  return { prompt:`數一數，有幾個 ${em}？`, speech:'數一數，有幾個？',
+  return { prompt:`數一數，有幾個 ${em}？`, speech:'鼠一鼠，有幾個？',
     visual:`<div class="countbox">${items}</div>`,
     options:NUMS(1,10), cols:5, answer:n,
     detail:v=>`${n}個 答${v}${Math.abs(v-n)===1?'（差1，可能漏數或重複數）':''}` };
@@ -304,7 +304,7 @@ function genOrd(){
   const idx = fromLeft ? k-1 : 7-k;                 // 從左邊數的位置（0 起算）
   const side = fromLeft?'左':'右';
   return { prompt:`從<b style="color:#E8590C">${side}邊</b>數起，第 <b style="color:#E8590C">${k}</b> 個是誰？`,
-    speech:`從${side}邊數起，第${k}個是誰？`, ord:true,
+    speech:`從${side}邊鼠起，第${k}個是誰？`, ord:true,
     visual:`<div class="sides"><span>⬅ 左邊</span><span>右邊 ➡</span></div>`,
     options:row.map((a,i)=>({label:a,value:i})), cols:7, answer:idx,
     detail:v=>{ const mirror = 6-idx; let tag='';
