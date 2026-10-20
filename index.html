@@ -154,6 +154,16 @@
   .end-wrap .stars{ font-size:56px; animation:pop .8s; }
   .end-wrap h2{ font-size:30px; color:var(--deep); }
   .end-wrap p{ font-size:18px; color:#9A6B3A; font-weight:700; }
+  /* 獎狀：有 cert.png（阿居畫的底圖）就用圖，沒有就用 CSS 框 */
+  .cert{ width:100%; max-width:340px; aspect-ratio:2/3; border-radius:14px; position:relative; animation:pop .8s;
+    background:#FFF8ED; border:10px double var(--gold); box-shadow:0 0 0 4px var(--orange), 0 10px 24px rgba(0,0,0,.15); }
+  .cert.hasimg{ background:url(cert.png) center/100% 100% no-repeat; border:none; box-shadow:0 10px 24px rgba(0,0,0,.15); }
+  .cert-in{ position:absolute; inset:20% 14% 16%; display:flex; flex-direction:column; align-items:center; justify-content:space-between; text-align:center; }
+  .cert-title{ font-size:44px; font-weight:900; color:#C62828; letter-spacing:6px; }
+  .cert-who{ font-size:24px; font-weight:900; color:var(--brown); border-bottom:3px solid var(--gold); padding:0 10px 2px; }
+  .cert-body{ font-size:21px; font-weight:800; color:var(--brown); line-height:1.6; } .cert-body b{ color:var(--deep); }
+  .cert-gift{ font-size:17px; font-weight:900; color:var(--green); }
+  .cert-foot{ font-size:13px; color:#9A6B3A; font-weight:700; line-height:1.5; }
   .big-btn{ width:100%; max-width:340px; padding:16px; border-radius:18px; font-size:22px; font-weight:900;
     background:linear-gradient(135deg,#F9A81B,#F5820A); color:#fff; box-shadow:0 5px 0 #C9620A; }
   .big-btn.ghost{ background:#fff; color:var(--deep); box-shadow:0 5px 0 rgba(245,130,10,.25); }
@@ -194,7 +204,7 @@
     <button class="all-card" id="btnAll">🚀 全部闖關</button>
     <div class="lv-grid" id="lvGrid"></div>
     <button class="adult-btn" id="btnAdult">📋 大人看結果</button>
-    <div style="text-align:center;font-size:12px;color:#C9A57A;margin-top:4px">版本 v5</div>
+    <div style="text-align:center;font-size:12px;color:#C9A57A;margin-top:4px">版本 v6</div>
   </section>
 
   <!-- 遊戲 -->
@@ -215,6 +225,15 @@
       <div class="stars">⭐⭐⭐</div>
       <h2 id="endTitle"></h2>
       <p id="endMsg"></p>
+      <div class="cert" id="cert" style="display:none">
+        <div class="cert-in">
+          <div class="cert-title">獎　狀</div>
+          <div class="cert-who">數學小勇士</div>
+          <div class="cert-body">闖過 <b id="certLv"></b><br>5 題全部答對！</div>
+          <div class="cert-gift">🎁 拿給阿嬤看，可以領獎喔！</div>
+          <div class="cert-foot"><span id="certDate"></span><br>SUNNY 魔法數學</div>
+        </div>
+      </div>
       <button class="big-btn" id="btnNext">下一關 ➜</button>
       <button class="big-btn ghost" id="btnEndHome">回首頁</button>
     </div>
@@ -251,7 +270,7 @@ function say(t){
   if(!('speechSynthesis' in window)) return;
   speechSynthesis.cancel();
   const u = new SpeechSynthesisUtterance(t);
-  u.lang = 'zh-TW'; if(zhVoice) u.voice = zhVoice; u.rate = 0.85;
+  u.lang = 'zh-TW'; if(zhVoice) u.voice = zhVoice; u.rate = 0.75;
   speechSynthesis.speak(u);
 }
 /* 答對小鈴聲（答錯不出聲） */
@@ -529,7 +548,15 @@ function nextQ(){
   $('endMsg').textContent = last ? '8 關全部闖完了，你超棒！🏆' : pick(['你很認真喔！','越玩越厲害！','繼續加油！']);
   $('btnNext').style.display = last ? 'none' : '';
   $('btnNext').textContent = allMode ? '下一關 ➜' : `第${li+2}關 ${last?'':LEVELS[li+1].name} ➜`;
-  say(`第${li+1}關完成，你很棒！`);
+  const allRight = rec.done===5 && rec.first===5;
+  $('cert').style.display = allRight ? '' : 'none';
+  if(allRight){
+    rec.cert = true; saveAll(sessions);
+    $('certLv').textContent = `第${li+1}關「${LEVELS[li].name}」`;
+    $('certDate').textContent = fmtTime(Date.now()).split(' ')[0];
+    $('endMsg').textContent = '全部答對！你拿到一張獎狀 🏅';
+    say('哇！全部答對！你拿到一張獎狀，拿給阿嬤看，可以領獎喔！');
+  } else say(`第${li+1}關完成，你很棒！`);
   show('end');
 }
 
@@ -537,11 +564,11 @@ function nextQ(){
 const wait=ms=>new Promise(r=>setTimeout(r,ms));
 function sayWait(t){
   return new Promise(res=>{
-    let done=false; const fin=()=>{ if(!done){ done=true; setTimeout(res,250); } };
-    setTimeout(fin, 900+t.length*380);              // 語音沒回應也會往下走
+    let done=false; const fin=()=>{ if(!done){ done=true; setTimeout(res,700); } };
+    setTimeout(fin, 1200+t.length*560);              // 語音沒回應也會往下走
     if(!('speechSynthesis' in window)) return;
     speechSynthesis.cancel();
-    const u=new SpeechSynthesisUtterance(t); u.lang='zh-TW'; if(zhVoice) u.voice=zhVoice; u.rate=0.85;
+    const u=new SpeechSynthesisUtterance(t); u.lang='zh-TW'; if(zhVoice) u.voice=zhVoice; u.rate=0.6;
     u.onend=fin; u.onerror=fin; speechSynthesis.speak(u);
   });
 }
@@ -614,7 +641,7 @@ const TEACH={
     const [r1,r2]=[...vis.querySelectorAll('.r')].map(r=>r.children);
     const m=Math.min(a,b), d=Math.abs(a-b);
     await S('一個對一個，配成一對 🤝');
-    for(let i=0;i<m;i++){ r1[i].classList.add('pair'); r2[i].classList.add('pair'); await P(280); }
+    for(let i=0;i<m;i++){ r1[i].classList.add('pair'); r2[i].classList.add('pair'); await P(450); }
     const long=a>b?r1:r2, [bigE,smE,bigN,smN]=a>b?[e1,e2,n1,n2]:[e2,e1,n2,n1];
     await S('沒有配到的，就是<b>多出來</b>的');
     for(let i=0;i<d;i++){ long[m+i].classList.add('lit'); badge(long[m+i],i+1); await S(`${i+1}`); }
@@ -693,6 +720,7 @@ function drawReport(s){
     <div class="rp-head"><div class="sun"><img src="logo.png" alt=""></div><h2>一年級數感闖關 · 結果<small>${fmtTime(s.start)}　玩了 ${played.length}/8 關　（答對＝第一次就答對）</small></h2></div>
     <table class="rp"><tr><th>狀態</th><th>單元／觀念</th><th>答對</th><th>錯在哪</th></tr>${rows}</table>
     <div class="rp-focus">${focus}</div>
+    ${(()=>{ const c=LEVELS.map((L,i)=>s.levels[L.id]&&s.levels[L.id].cert?`第${i+1}關 ${L.name}`:null).filter(Boolean); return c.length?`<div class="rp-focus" style="border-color:var(--green)">🏅 <b>拿到獎狀：</b>${c.join('、')}</div>`:''; })()}
     <div class="rp-note">錯了沒關係，陪他再試一次就好 😊　—— SUNNY 魔法數學</div>`;
   $('hist').innerHTML = sessions.length>1 ? '<b>以前的紀錄（點一下看）</b>' + sessions.slice().reverse().map((x,k)=>{
     const idx=sessions.length-1-k;
@@ -711,6 +739,7 @@ $('btnAdult').onclick=()=>{ drawReport(cur); show('report'); };
 $('btnRpHome').onclick=()=>{ drawHome(); show('home'); };
 $('btnNewSess').onclick=()=>{ if(confirm('要開始新的一次測驗嗎？（舊的紀錄會保留在下面）')){ newSession(); drawHome(); show('home'); } };
 drawHome();
+(()=>{ const im=new Image(); im.onload=()=>$('cert').classList.add('hasimg'); im.src='cert.png'; })();
 </script>
 </body>
 </html>
