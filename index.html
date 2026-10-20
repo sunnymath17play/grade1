@@ -114,6 +114,41 @@
   /* shapes */
   .shapes .opt{ font-size:48px; min-height:90px; }
 
+  /* ---- 教學 ---- */
+  .teach{ background:#fff; border-radius:18px; padding:12px; border:3px solid var(--green); }
+  .t-title{ font-size:18px; font-weight:900; color:var(--green); margin-bottom:8px; }
+  .t-vis{ display:flex; flex-direction:column; align-items:center; gap:8px; }
+  .t-say{ margin-top:12px; font-size:22px; font-weight:800; text-align:center; min-height:64px; line-height:1.45; }
+  .t-say b{ color:var(--deep); }
+  .t-btns{ display:grid; grid-template-columns:1fr 1.4fr; gap:10px; margin-top:12px; }
+  .t-btns button{ min-height:58px; border-radius:16px; font-size:19px; font-weight:900; background:#fff; border:3px solid #BBDEFB; box-shadow:0 5px 0 rgba(30,136,229,.35); }
+  .t-btns #tNext{ background:var(--green); color:#fff; border-color:var(--green); box-shadow:0 5px 0 #2E7D32; }
+  .rel{ position:relative; }
+  .badge{ position:absolute; top:-8px; right:-8px; min-width:22px; height:22px; padding:0 4px; border-radius:11px; background:var(--deep); color:#fff;
+    font-size:14px; font-style:normal; font-weight:900; line-height:22px; text-align:center; font-family:Arial,sans-serif; animation:pop .4s; }
+  .lit{ filter:drop-shadow(0 0 5px #F9A81B); }
+  .ans{ outline:4px solid var(--green); outline-offset:3px; border-radius:10px; animation:pop .5s; }
+  .numrow div.lit{ background:#FFF3D9; border-color:var(--orange); }
+  .numrow div.ans{ color:var(--green); border-color:var(--green); background:#E8F5E9; }
+  .numrow.small{ gap:4px; } .numrow.small div{ width:28px; height:40px; font-size:18px; border-width:2px; border-radius:8px; }
+  .numrow div.mk1{ background:#FFE0B2; } .numrow div.mk2{ background:#BBDEFB; }
+  .ordrow{ display:flex; gap:4px; font-size:27px; } .ordrow span{ padding:2px; }
+  .sides span.sidelit{ color:#fff; background:var(--deep); border-radius:8px; padding:2px 8px; animation:pop .5s; }
+  .rows .r span{ border-radius:6px; } .rows .r span.pair{ background:#ECEFF1; } .rows .r span.lit{ background:#FFF3D9; }
+  .bean.hidb{ background:#F57C00; } .hidc{ color:#F57C00 !important; } .gap{ width:14px; }
+  .lenbox{ position:relative; display:flex; flex-direction:column; gap:12px; padding:8px 0; width:290px; }
+  .lenbox .tbar{ color:#fff; font-size:15px; font-weight:900; padding-left:8px; line-height:26px; transition:opacity .4s; }
+  .lenbox .tbar.fade{ opacity:.25; }
+  .startline{ position:absolute; left:-3px; top:0; bottom:0; border-left:3px dashed transparent; }
+  .startline.on{ border-color:var(--green); }
+  .tcard{ border:3px solid #E0E0E0; border-radius:14px; width:100%; } .tcard.bad{ border-color:#FFCDD2; }
+  .tcard .mv{ transition:margin-left .8s; }
+  .shapecards{ display:grid; grid-template-columns:repeat(3,1fr); gap:6px; width:100%; }
+  .scard{ border:2px solid #FFE0B2; border-radius:12px; padding:6px 4px; text-align:center; font-size:13px; line-height:1.35; }
+  .scard .se{ font-size:40px; } .scard b{ font-size:16px; display:block; }
+  .roll{ display:inline-block; animation:roll 1.2s ease-in-out 2; }
+  @keyframes roll{ 50%{ transform:translateX(18px) rotate(360deg);} }
+
   /* ---- Level end ---- */
   .end-wrap{ flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px; text-align:center; }
   .end-wrap .stars{ font-size:56px; animation:pop .8s; }
@@ -159,7 +194,7 @@
     <button class="all-card" id="btnAll">🚀 全部闖關</button>
     <div class="lv-grid" id="lvGrid"></div>
     <button class="adult-btn" id="btnAdult">📋 大人看結果</button>
-    <div style="text-align:center;font-size:12px;color:#C9A57A;margin-top:4px">版本 v4</div>
+    <div style="text-align:center;font-size:12px;color:#C9A57A;margin-top:4px">版本 v5</div>
   </section>
 
   <!-- 遊戲 -->
@@ -254,11 +289,11 @@ const NUMS = (a,b)=>range(a,b).map(n=>({label:n,value:n}));
 
 function genCount(){
   const n=rnd(1,10), em=pick(FRUITS);
-  const cells=sample(range(0,19),n);
-  const items=cells.map(c=>{ const col=c%5,row=Math.floor(c/5);
-    return `<span style="left:${12+col*56+rnd(-6,6)}px;top:${8+row*47+rnd(-4,4)}px">${em}</span>`; }).join('');
+  const cells=sample(range(0,19),n).sort((x,y)=>x-y);
+  const pos=cells.map(c=>[12+(c%5)*56+rnd(-6,6), 8+Math.floor(c/5)*47+rnd(-4,4)]);
+  const items=pos.map(([x,y])=>`<span style="left:${x}px;top:${y}px">${em}</span>`).join('');
   return { prompt:`數一數，有幾個 ${em}？`, speech:'鼠一鼠，有幾個？',
-    visual:`<div class="countbox">${items}</div>`,
+    visual:`<div class="countbox">${items}</div>`, t:{type:'count',em,pos,n},
     options:NUMS(1,10), cols:5, answer:n,
     detail:v=>`${n}個 答${v}${Math.abs(v-n)===1?'（差1，可能漏數或重複數）':''}` };
 }
@@ -266,7 +301,7 @@ function genCount(){
 function genTake(){
   const n=rnd(3,10), em=pick(['🍪','🍬','🍩','🧁']);
   return { prompt:`請放 <b style="color:#E8590C;font-size:30px">${n}</b> 個 ${em} 到盤子裡`, speech:`請放${n}個到盤子裡，放好了按好了`,
-    custom:true, answer:n, em,
+    custom:true, answer:n, em, t:{type:'take',em,n},
     detail:v=>`要${n}個 拿了${v}個` };
 }
 function buildTake(q, area, submit){
@@ -288,7 +323,7 @@ function genSeq(kind){
     const big = Math.random()<.6;
     const ans = big ? Math.max(a,b) : Math.min(a,b);
     return { prompt:`哪一個比較<b style="color:#E8590C">${big?'大':'小'}</b>？`, speech:`哪一個數字比較${big?'大':'小'}？`,
-      visual:'', options:[{label:a,value:a},{label:b,value:b}], cols:2, big:true, answer:ans,
+      visual:'', options:[{label:a,value:a},{label:b,value:b}], cols:2, big:true, answer:ans, t:{type:'cmp',a,b,big},
       detail:v=>`${a}和${b}比較${big?'大':'小'} 答${v}` };
   }
   const down = Math.random()<.3;
@@ -297,7 +332,7 @@ function genSeq(kind){
   const show = seq.map((x,i)=>i===hole?'?':x);
   return { prompt:`數字排隊，<b style="color:#1E88E5">?</b> 是多少？`, speech:'數字排隊，問號是多少？',
     visual:`<div class="numrow">${show.map(x=>`<div class="${x==='?'?'q':''}">${x}</div>`).join('')}</div>`,
-    options:NUMS(1,10), cols:5, answer:ans,
+    options:NUMS(1,10), cols:5, answer:ans, t:{type:'seq',seq,hole,down},
     detail:v=>`${show.join(' ')} 答${v}${down?'（倒著數）':''}` };
 }
 
@@ -308,7 +343,7 @@ function genOrd(){
   return { prompt:`從<b style="color:#E8590C">${side}邊</b>數起，第 <b style="color:#E8590C">${k}</b> 個是誰？`,
     speech:`從${side}邊鼠起，第${k}個是誰？`, ord:true,
     visual:`<div class="sides"><span>⬅ 左邊</span><span>右邊 ➡</span></div>`,
-    options:row.map((a,i)=>({label:a,value:i})), cols:7, answer:idx,
+    options:row.map((a,i)=>({label:a,value:i})), cols:7, answer:idx, t:{type:'ord',row,fromLeft,k,idx},
     detail:v=>{ const mirror = 6-idx; let tag='';
       if(v===mirror) tag='（左右搞反）'; else if(Math.abs(v-idx)===1) tag='（差一個）';
       return `從${side}數第${k}個 點到${row[v]}${tag}`; } };
@@ -322,13 +357,13 @@ function genMore(kind){
   if(kind==='which'){
     const ans = a>b?e1:e2;
     return { prompt:`${e1} 和 ${e2}，哪一種比較多？`, speech:`${n1}和${n2}，哪一種比較多？`,
-      visual:rowsHtml, options:[{label:e1,value:e1},{label:e2,value:e2}], cols:2, big:true, answer:ans,
+      visual:rowsHtml, options:[{label:e1,value:e1},{label:e2,value:e2}], cols:2, big:true, answer:ans, t:{type:'more',kind,e1,e2,n1,n2,a,b},
       detail:v=>`${e1}${a}個 ${e2}${b}個 選${v}比較多` };
   }
   const [bigE,smE,bigN,smN,bigC,smC] = a>b?[e1,e2,n1,n2,a,b]:[e2,e1,n2,n1,b,a];
   const ans=bigC-smC;
   return { prompt:`${bigE} 比 ${smE} 多幾個？`, speech:`${bigN}比${smN}多幾個？`,
-    visual:rowsHtml, options:NUMS(1,10), cols:5, answer:ans,
+    visual:rowsHtml, options:NUMS(1,10), cols:5, answer:ans, t:{type:'more',kind,e1,e2,n1,n2,a,b},
     detail:v=>`${bigE}${bigC} ${smE}${smC} 多幾個 答${v}${v===bigC?'（答成總數）':''}` };
 }
 
@@ -336,7 +371,7 @@ function genBean(){
   const n=rnd(5,10), hid=rnd(1,n-1), out=n-hid;
   return { prompt:`總共 <b style="color:#E8590C">${n}</b> 顆豆子，杯子裡藏了幾顆？`,
     speech:`這裡有${n}顆豆子。我用杯子蓋住一些。杯子外面還有${out}顆，杯子裡面藏了幾顆？`,
-    bean:{n,out}, options:NUMS(1,9), cols:5, answer:hid,
+    bean:{n,out}, options:NUMS(1,9), cols:5, answer:hid, t:{type:'bean',n,out,hid},
     detail:v=>`${n}＝${out}＋□ 答${v}${v===out?'（答成外面的）':v===n?'（答成總數）':''}` };
 }
 function buildBean(q, area, ready){
@@ -361,7 +396,7 @@ function genLen(kind){
         <div class="bar" style="width:62%;margin-left:${off}%;background:#1E88E5"></div></div>`; };
     const A=card(fairFirst,'Ａ'), B=card(!fairFirst,'Ｂ');
     return { prompt:'比長短，哪一種比法才<b style="color:#E8590C">公平</b>？', speech:'比長短，哪一種比法才公平？',
-      visual:'', options:[{label:A,value:'A',html:true},{label:B,value:'B',html:true}], cols:1, answer:fairFirst?'A':'B',
+      visual:'', options:[{label:A,value:'A',html:true},{label:B,value:'B',html:true}], cols:1, answer:fairFirst?'A':'B', t:{type:'fair',fairFirst},
       detail:v=>`公平比法（一端對齊）選了沒對齊的那個` };
   }
   const lens=sample(range(3,10),3), long=Math.random()<.6;
@@ -369,11 +404,11 @@ function genLen(kind){
   return { prompt:`哪一條最<b style="color:#E8590C">${long?'長':'短'}</b>？`, speech:`哪一條最${long?'長':'短'}？`,
     visual:'', len:true,
     options:lens.map((L,i)=>({label:`<span class="lbl">${COLORS[i][1]}</span><div class="bar" style="width:${L*24}px;background:${COLORS[i][0]}"></div>`,value:i,html:true})),
-    cols:1, answer:target,
+    cols:1, answer:target, t:{type:'len',lens,target,long},
     detail:v=>`最${long?'長':'短'} 選了${COLORS[v][1]}色` };
 }
 
-const SH={ box:['📦','🎁','🧊'], can:['🥫','🧻','🥁'], ball:['⚽','🏀','🎾','🏐'] };
+const SH={ box:['📦','🎁','🧊'], can:['🥫','🧻','🥁'], ball:['⚽','🏀','🏐'] };
 const SHQ=[
   ['哪一個最容易滾動？','ball'], ['哪一個可以疊高，也可以滾動？','can'],
   ['哪一個只有平平的面？','box'], ['哪一個只有彎彎的面？','ball'],
@@ -382,7 +417,7 @@ function genShape(i){
   const [txt,kind]=SHQ[i];
   const objs=shuffle(['box','can','ball']).map(k=>({label:pick(SH[k]),value:k}));
   const nm={box:'方盒',can:'圓罐',ball:'球'};
-  return { prompt:txt, speech:txt, visual:'', shapes:true, options:objs, cols:3, answer:kind,
+  return { prompt:txt, speech:txt, visual:'', shapes:true, options:objs, cols:3, answer:kind, t:{type:'shape',kind,txt,objs},
     detail:v=>`「${txt.replace('？','')}」選了${nm[v]}` };
 }
 
@@ -478,12 +513,11 @@ function answer(v, btn){
     $('fb').className='feedback soft'; $('fb').textContent='再想想看～慢慢來 💪'; say('再想想看，慢慢來');
     return;
   }
-  // 第二次還沒對：示範答案，下一題
+  // 第二次還沒對：一起看教學，懂了再下一題
   busy=true; rec.done++; saveAll(sessions);
   if(btn) btn.classList.add('tried');
-  q.showAnswer && q.showAnswer();
-  $('fb').className='feedback show'; $('fb').textContent='看，答案在這裡！沒關係，我們下一題 😊';
-  say('沒關係，我們看答案，下一題'); setTimeout(nextQ, 2600);
+  $('fb').className='feedback show'; $('fb').textContent='沒關係，我們一起來看 👀';
+  say('沒關係，我們一起來看'); setTimeout(()=>teach(q), 1200);
 }
 
 function nextQ(){
@@ -498,6 +532,136 @@ function nextQ(){
   say(`第${li+1}關完成，你很棒！`);
   show('end');
 }
+
+/* ========== 教學（第二次答錯時） ========== */
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+function sayWait(t){
+  return new Promise(res=>{
+    let done=false; const fin=()=>{ if(!done){ done=true; setTimeout(res,250); } };
+    setTimeout(fin, 900+t.length*380);              // 語音沒回應也會往下走
+    if(!('speechSynthesis' in window)) return;
+    speechSynthesis.cancel();
+    const u=new SpeechSynthesisUtterance(t); u.lang='zh-TW'; if(zhVoice) u.voice=zhVoice; u.rate=0.85;
+    u.onend=fin; u.onerror=fin; speechSynthesis.speak(u);
+  });
+}
+const badge=(el,n)=>el.insertAdjacentHTML('beforeend',`<i class="badge">${n}</i>`);
+let teachId=0;
+async function teach(q){
+  const my=++teachId;
+  const alive=()=>my===teachId && $('game').classList.contains('active');
+  const stage=$('stage'); stage.className='';
+  stage.innerHTML=`<div class="teach"><div class="t-title">🧑‍🏫 我們一起來看</div><div class="t-vis" id="tVis"></div><div class="t-say" id="tSay"></div></div>
+    <div class="t-btns" id="tBtns" style="visibility:hidden"><button id="tAgain">🔁 再看一次</button><button id="tNext">👍 我懂了，下一題</button></div>`;
+  $('fb').textContent='';
+  // S(畫面文字, 唸的文字)：唸的文字裡動詞「數」要寫成「鼠」才會唸ㄕㄨˇ
+  const S=async(txt,speak)=>{ if(!alive()) throw 'stop'; $('tSay').innerHTML=txt; await sayWait(speak||txt.replace(/<[^>]+>/g,'')); if(!alive()) throw 'stop'; };
+  const P=async ms=>{ await wait(ms); if(!alive()) throw 'stop'; };
+  try{ await TEACH[q.t.type](q.t, $('tVis'), S, P); }
+  catch(e){ if(e!=='stop') console.error(e); return; }
+  $('tBtns').style.visibility='visible';
+  $('tAgain').onclick=()=>teach(q);
+  $('tNext').onclick=()=>{ teachId++; if('speechSynthesis' in window) speechSynthesis.cancel(); nextQ(); };
+}
+const SHAPE_INFO={
+  box:['方盒','只有平平的面','可以疊高，不會滾'],
+  can:['圓罐','有平平的面，也有彎彎的面','站著可以疊，躺下來會滾'],
+  ball:['球','只有彎彎的面','最會滾，不能疊'] };
+const TEACH={
+  async count({em,pos,n},vis,S){
+    vis.innerHTML=`<div class="countbox">${pos.map(([x,y])=>`<span style="left:${x}px;top:${y}px">${em}</span>`).join('')}</div>`;
+    const it=vis.querySelectorAll('span');
+    await S('手指一個一個點，嘴巴一個一個念 👆');
+    for(let i=0;i<n;i++){ it[i].classList.add('lit'); badge(it[i],i+1); await S(`${i+1}`); }
+    await S(`最後念到 <b>${n}</b>，所以有 <b>${n}</b> 個！`);
+  },
+  async take({em,n},vis,S){
+    vis.innerHTML=`<div class="bignum">${n}</div><div class="plate"></div>`;
+    const plate=vis.querySelector('.plate');
+    await S(`看清楚，數字是 <b>${n}</b>。放一個、念一個，念到 ${n} 就停！`);
+    for(let i=1;i<=n;i++){ plate.insertAdjacentHTML('beforeend',`<span class="rel">${em}</span>`); badge(plate.lastElementChild,i); await S(`${i}`); }
+    await S(`念到 <b>${n}</b>，停！盤子裡剛好 <b>${n}</b> 個 ✋`);
+  },
+  async seq({seq,hole,down},vis,S){
+    vis.innerHTML=`<div class="numrow">${seq.map((x,i)=>`<div class="${i===hole?'q':''}">${i===hole?'?':x}</div>`).join('')}</div>`;
+    const bx=vis.querySelectorAll('.numrow div');
+    await S(down?'數字倒著排隊，一個比一個<b>少 1</b>':'數字排隊，一個比一個<b>多 1</b>', down?'數字倒著排隊，一個比一個少一':'數字排隊，一個比一個多一');
+    for(let i=0;i<5;i++){ bx[i].classList.add('lit'); if(i===hole){ bx[i].textContent=seq[i]; bx[i].classList.add('ans'); } await S(`${seq[i]}`); }
+    await S(`問號就是 <b>${seq[hole]}</b>！`);
+  },
+  async cmp({a,b,big},vis,S){
+    vis.innerHTML=`<div class="numrow small">${range(1,10).map(x=>`<div>${x}</div>`).join('')}</div>`;
+    const bx=vis.querySelectorAll('.numrow div');
+    await S('數字排隊：越<b>後面</b>越大，越<b>前面</b>越小');
+    bx[a-1].classList.add('mk1'); await S(`${a} 在這裡`);
+    bx[b-1].classList.add('mk2'); await S(`${b} 在這裡`);
+    const ans=big?Math.max(a,b):Math.min(a,b);
+    bx[ans-1].classList.add('ans');
+    await S(big?`<b>${ans}</b> 排在比較後面，所以 <b>${ans}</b> 比較大！`:`<b>${ans}</b> 排在比較前面，所以 <b>${ans}</b> 比較小！`);
+  },
+  async ord({row,fromLeft,k,idx},vis,S){
+    vis.innerHTML=`<div class="sides"><span>⬅ 左邊</span><span>右邊 ➡</span></div><div class="ordrow">${row.map(a=>`<span class="rel">${a}</span>`).join('')}</div>`;
+    const sd=vis.querySelectorAll('.sides span'), it=vis.querySelectorAll('.ordrow span');
+    const side=fromLeft?'左':'右';
+    sd[fromLeft?0:1].classList.add('sidelit');
+    await S(`先找到<b>${side}邊</b>，從這一頭開始數`, `先找到${side}邊，從這一頭開始鼠`);
+    for(let j=1;j<=k;j++){ const i=fromLeft?j-1:7-j; it[i].classList.add('lit'); badge(it[i],j); await S(`第${j}個`); }
+    it[idx].classList.add('ans');
+    await S(`從${side}邊數第 <b>${k}</b> 個，就是 ${row[idx]}！`, `從${side}邊鼠第${k}個，就是牠！`);
+  },
+  async more({kind,e1,e2,n1,n2,a,b},vis,S,P){
+    vis.innerHTML=`<div class="rows"><div class="r">${Array(a).fill(`<span class="rel">${e1}</span>`).join('')}</div><div class="r">${Array(b).fill(`<span class="rel">${e2}</span>`).join('')}</div></div>`;
+    const [r1,r2]=[...vis.querySelectorAll('.r')].map(r=>r.children);
+    const m=Math.min(a,b), d=Math.abs(a-b);
+    await S('一個對一個，配成一對 🤝');
+    for(let i=0;i<m;i++){ r1[i].classList.add('pair'); r2[i].classList.add('pair'); await P(280); }
+    const long=a>b?r1:r2, [bigE,smE,bigN,smN]=a>b?[e1,e2,n1,n2]:[e2,e1,n2,n1];
+    await S('沒有配到的，就是<b>多出來</b>的');
+    for(let i=0;i<d;i++){ long[m+i].classList.add('lit'); badge(long[m+i],i+1); await S(`${i+1}`); }
+    if(kind==='which') await S(`${bigE} 有多出來，所以 <b>${bigE} 比較多</b>！`, `${bigN}有多出來，所以${bigN}比較多`);
+    else await S(`多出來 <b>${d}</b> 個，所以 ${bigE} 比 ${smE} 多 <b>${d}</b> 個！`, `多出來${d}個，所以${bigN}比${smN}多${d}個`);
+  },
+  async bean({n,out,hid},vis,S){
+    vis.innerHTML=`<div class="beanstage"><div class="cup">?</div>${Array(out).fill('<div class="bean"></div>').join('')}</div><div class="bond" style="visibility:hidden"></div>`;
+    const st=vis.querySelector('.beanstage'), bond=vis.querySelector('.bond');
+    await S(`總共 <b>${n}</b> 顆，杯子外面有 <b>${out}</b> 顆`);
+    st.innerHTML=Array(out).fill('<div class="bean"></div>').join('')+'<div class="gap"></div>'+Array(hid).fill('<div class="bean hidb rel"></div>').join('');
+    await S('把杯子拿起來看看！<span class="hidc">橘色</span>的是藏在杯子裡的', '把杯子拿起來看看！橘色的是藏在杯子裡的');
+    const hb=st.querySelectorAll('.hidb');
+    for(let i=0;i<hid;i++){ badge(hb[i],i+1); await S(`${i+1}`); }
+    bond.innerHTML=`<b>${n}</b> 可以分成 <b>${out}</b> 和 <b class="hidc">${hid}</b>`; bond.style.visibility='visible';
+    await S(`杯子裡有 <b>${hid}</b> 顆。${n} 可以分成 ${out} 和 ${hid}！`);
+  },
+  async len({lens,target,long},vis,S){
+    vis.innerHTML=`<div class="lenbox"><div class="startline"></div>${lens.map((L,i)=>`<div class="bar tbar" style="width:${L*24}px;background:${COLORS[i][0]}">${COLORS[i][1]}</div>`).join('')}</div>`;
+    const bars=vis.querySelectorAll('.tbar');
+    vis.querySelector('.startline').classList.add('on');
+    await S('左邊都<b>對齊</b>了 👍');
+    await S(`看右邊，誰跑得最${long?'遠':'近'}？`);
+    bars.forEach((b,i)=>{ if(i!==target) b.classList.add('fade'); });
+    bars[target].classList.add('ans');
+    await S(`<b>${COLORS[target][1]}色</b>最${long?'長':'短'}！`);
+  },
+  async fair({fairFirst},vis,S,P){
+    const card=(aligned,lab)=>`<div class="fair tcard"><b>${lab}</b><div class="bar" style="width:80%;background:#E53935"></div><div class="bar mv" style="width:62%;margin-left:${aligned?0:30}%;background:#1E88E5"></div></div>`;
+    vis.innerHTML=card(fairFirst,'Ａ')+card(!fairFirst,'Ｂ');
+    const cards=vis.querySelectorAll('.tcard'), good=cards[fairFirst?0:1], bad=cards[fairFirst?1:0];
+    const g=fairFirst?'A':'B', w=fairFirst?'B':'A';
+    await S('比長短，要先把<b>一頭對齊</b>');
+    good.classList.add('ans'); await S(`${g} 有對齊，才公平 ✅`, `${g}有對齊，才公平`);
+    bad.classList.add('bad'); await S(`${w} 沒有對齊，看不出誰長`);
+    bad.querySelector('.mv').style.marginLeft='0';
+    await P(900);
+    await S('把藍色推回來對齊，就看出<b>紅色比較長</b>了！');
+  },
+  async shape({kind,txt,objs},vis,S){
+    vis.innerHTML=`<div class="shapecards">${objs.map(o=>`<div class="scard" data-k="${o.value}" style="visibility:hidden"><div class="se">${o.label}</div><b>${SHAPE_INFO[o.value][0]}</b><div>${SHAPE_INFO[o.value][1]}</div><div>${SHAPE_INFO[o.value][2]}</div></div>`).join('')}</div>`;
+    for(const c of vis.querySelectorAll('.scard')){ const [nm,f,act]=SHAPE_INFO[c.dataset.k]; c.style.visibility='visible'; await S(`<b>${nm}</b>：${f}，${act}`); }
+    const ans=vis.querySelector(`.scard[data-k="${kind}"]`); ans.classList.add('ans');
+    if(kind!=='box') ans.querySelector('.se').classList.add('roll');
+    await S(`${txt.replace('？','')} → <b>${SHAPE_INFO[kind][0]}</b>！`, `所以答案是${SHAPE_INFO[kind][0]}`);
+  },
+};
 
 /* ========== 大人看結果 ========== */
 function statusOf(r){
@@ -540,7 +704,7 @@ function drawReport(s){
 /* ========== 按鈕 ========== */
 $('btnAll').onclick=()=>{ allMode=true; const next=LEVELS.findIndex(L=>!(cur.levels[L.id] && cur.levels[L.id].done>=5)); startLevel(next<0?0:next); };
 $('btnSpk').onclick=()=>say(qs[qi].speech);
-$('btnQuit').onclick=()=>{ speechSynthesis && speechSynthesis.cancel(); drawHome(); show('home'); };
+$('btnQuit').onclick=()=>{ teachId++; speechSynthesis && speechSynthesis.cancel(); drawHome(); show('home'); };
 $('btnNext').onclick=()=>startLevel(li+1);
 $('btnEndHome').onclick=()=>{ drawHome(); show('home'); };
 $('btnAdult').onclick=()=>{ drawReport(cur); show('report'); };
