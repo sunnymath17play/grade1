@@ -149,6 +149,31 @@
   .roll{ display:inline-block; animation:roll 1.2s ease-in-out 2; }
   @keyframes roll{ 50%{ transform:translateX(18px) rotate(360deg);} }
 
+  /* ---- v8 新題型 ---- */
+  .vlabel{ font-size:16px; font-weight:800; color:#B0742A; text-align:center; margin:4px 0; }
+  .vlabel.sidelit{ color:#fff; background:var(--deep); border-radius:8px; padding:2px 10px; display:inline-block; }
+  .vert .opts{ max-width:110px; margin:0 auto; gap:6px; } .vert .opt{ min-height:52px; font-size:30px; }
+  .ordcol{ display:flex; flex-direction:column; gap:4px; font-size:30px; } .ordcol span{ padding:0 6px; }
+  .vbox{ display:flex; flex-direction:column; align-items:center; justify-content:flex-end; gap:4px; min-height:160px; font-size:15px; }
+  .vbar{ width:36px; border-radius:14px 14px 4px 4px; transition:opacity .4s; } .vbar.fade{ opacity:.25; }
+  .vbars{ display:flex; gap:22px; align-items:flex-end; justify-content:center; }
+  .ground{ height:4px; background:#BDBDBD; border-radius:2px; width:100%; } .ground.on{ background:var(--green); width:260px; }
+  .tcardT{ display:flex; flex-direction:column; align-items:center; gap:4px; padding:8px; font-size:20px; border:3px solid transparent; border-radius:12px; }
+  .tcardT.bad{ border-color:#FFCDD2; }
+  .vpair{ display:flex; gap:12px; align-items:flex-end; height:160px; }
+  .vcol{ display:flex; flex-direction:column; align-items:center; }
+  .step{ width:52px; background:#8D6E63; border-radius:4px; transition:height .8s; }
+  .tpair{ display:flex; gap:10px; justify-content:center; }
+  .book{ width:200px; border-radius:4px 10px 10px 4px; box-shadow:inset 0 -3px 0 rgba(255,255,255,.35); transition:opacity .4s; flex:none; }
+  .book.fade{ opacity:.25; }
+  .bookstack{ display:flex; flex-direction:column; gap:10px; } .bookrow{ display:flex; align-items:center; gap:10px; font-weight:800; }
+  .linelist{ display:flex; flex-direction:column; gap:8px; } .lrow{ display:flex; align-items:center; gap:12px; font-size:20px; padding:2px 6px; }
+  .nthrow{ display:flex; gap:3px; justify-content:center; }
+  .nth{ font-size:24px; padding:5px 1px; min-width:0; border-radius:10px; background:#fff; border:3px solid #E0E0E0; }
+  .nth.on{ background:#FFE082; border-color:var(--orange); }
+  .enough{ display:flex; flex-direction:column; gap:14px; background:#fff; border-radius:16px; padding:12px; width:300px; }
+  .enough .er1{ display:flex; gap:14px; flex-wrap:wrap; font-size:28px; } .enough .er2{ display:flex; gap:4px; flex-wrap:wrap; font-size:30px; justify-content:flex-end; }
+
   /* ---- Level end ---- */
   .end-wrap{ flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px; text-align:center; }
   .end-wrap .stars{ font-size:56px; animation:pop .8s; }
@@ -176,13 +201,14 @@
   .rp-head .sun{ width:36px; height:36px; } .rp-head .sun img{ width:91px; margin:-23px 0 0 0; }
   .rp-head h2{ font-size:17px; color:var(--deep); line-height:1.25; }
   .rp-head h2 small{ display:block; font-size:12px; color:#9A8570; font-weight:600; }
-  table.rp{ width:100%; border-collapse:collapse; margin-top:8px; font-size:13px; }
+  table.rp{ width:100%; border-collapse:collapse; margin-top:8px; font-size:12px; }
   table.rp th{ white-space:nowrap; background:#FFF3D9; font-size:12px; padding:4px 3px; text-align:left; }
-  table.rp td{ border-bottom:1px solid #F3E2C7; padding:5px 3px; vertical-align:top; line-height:1.35; }
-  table.rp td.st{ font-size:12px; white-space:nowrap; font-weight:800; }
+  table.rp td{ border-bottom:1px solid #F3E2C7; padding:3px 3px; vertical-align:top; line-height:1.35; }
+  table.rp td.st{ font-size:14px; white-space:nowrap; font-weight:800; width:22px; }
+  .rp-legend{ font-size:11px; color:#9A8570; margin-top:6px; }
   table.rp td.sc{ white-space:nowrap; font-weight:800; text-align:center; }
-  table.rp td .u{ color:#9A8570; font-size:11px; display:block; }
-  table.rp td.wr{ font-size:12px; color:#6D4C41; }
+  table.rp td .u{ color:#9A8570; font-size:10px; margin-right:3px; }
+  table.rp td.wr{ font-size:11px; color:#6D4C41; }
   tr.s-ok td.st{ color:var(--green); } tr.s-mid td.st{ color:#EF6C00; } tr.s-bad td.st{ color:var(--red); }
   tr.s-none td{ color:#BDBDBD; }
   .rp-focus{ margin-top:10px; background:#FFF8E1; border-left:5px solid var(--orange); border-radius:8px; padding:8px 10px; font-size:14px; line-height:1.5; }
@@ -202,11 +228,11 @@
   <section class="screen active" id="home">
     <div class="brand"><div class="sun"><img src="logo.png" alt=""></div><div class="txt">SUNNY<small>魔法數學</small></div></div>
     <div class="home-title">數感闖關</div>
-    <div class="home-sub">✦ 一年級 · 8 個小關卡 ✦</div>
+    <div class="home-sub">✦ 一年級 · 12 個小關卡 ✦</div>
     <button class="all-card" id="btnAll">🚀 全部闖關</button>
     <div class="lv-grid" id="lvGrid"></div>
     <button class="adult-btn" id="btnAdult">📋 大人看結果</button>
-    <div style="text-align:center;font-size:12px;color:#C9A57A;margin-top:4px">版本 v7</div>
+    <div style="text-align:center;font-size:12px;color:#C9A57A;margin-top:4px">版本 v8</div>
   </section>
 
   <!-- 遊戲 -->
@@ -231,7 +257,7 @@
         <div class="cert-in">
           <div class="cert-title">獎　狀</div>
           <div class="cert-who">數學小勇士</div>
-          <div class="cert-body">闖過 <b id="certLv"></b><br>5 題全部答對！</div>
+          <div class="cert-body">闖過 <b id="certLv"></b><br><span id="certN">5</span> 題全部答對！</div>
           <div class="cert-gift">🎁 拿給阿嬤看，可以領獎喔！</div>
         </div>
         <div class="cert-foot"><span id="certDate"></span><br>SUNNY 魔法數學</div>
@@ -339,6 +365,12 @@ function buildTake(q, area, submit){
 }
 
 function genSeq(kind){
+  if(kind==='nb'){
+    const x=rnd(2,9), after=Math.random()<.5, ans=after?x+1:x-1;
+    return { prompt:`<b style="color:#E8590C">${x}</b> 的${after?'後面':'前面'}是哪個數字？`, speech:`${x}的${after?'後面':'前面'}是哪個數字？`,
+      visual:'', options:NUMS(1,10), cols:5, answer:ans, t:{type:'nb',x,after},
+      detail:v=>`${x}的${after?'後面':'前面'} 答${v}${v===(after?x-1:x+1)?'（前後搞反）':''}` };
+  }
   if(kind==='cmp'){
     let a=rnd(1,10), b; do{ b=rnd(1,10); }while(b===a);
     const big = Math.random()<.6;
@@ -370,16 +402,33 @@ function genOrd(){
       return `從${side}數第${k}個 點到${row[v]}${tag}`; } };
 }
 
+function genOrdV(){
+  const col=sample(ANIMALS,6), fromTop=Math.random()<.5, k=rnd(2,5);
+  const idx = fromTop ? k-1 : 6-k;                  // 從上面數的位置（0 起算）
+  const side = fromTop?'上':'下', dir = fromTop?'從上往下':'從下往上';
+  return { prompt:`<b style="color:#E8590C">${dir}</b>數，第 <b style="color:#E8590C">${k}</b> 個是誰？`,
+    speech:`${dir}鼠，第${k}個是誰？`, vert:true,
+    visual:`<div class="vlabel">⬆ 上面</div>`, after:`<div class="vlabel">⬇ 下面</div>`,
+    options:col.map((a,i)=>({label:a,value:i})), cols:1, answer:idx, t:{type:'ordv',col,fromTop,k,idx},
+    detail:v=>{ let tag=''; if(v===5-idx) tag='（上下搞反）'; else if(Math.abs(v-idx)===1) tag='（差一個）';
+      return `${dir}數第${k}個 點到${col[v]}${tag}`; } };
+}
+
 const PAIRS=[['🐰','🥕','兔子','紅蘿蔔'],['🐶','🦴','小狗','骨頭'],['🐵','🍌','猴子','香蕉'],['🐱','🐟','小貓','魚'],['🐔','🥚','雞','蛋']];
-function genMore(kind){
+
+function genMore(kind,equal){
   const [e1,e2,n1,n2]=pick(PAIRS);
   let a=rnd(3,10), b; do{ b=rnd(2,10); }while(b===a || Math.abs(a-b)>4);
   const rowsHtml=`<div class="rows"><div class="r">${Array(a).fill(`<span>${e1}</span>`).join('')}</div><div class="r">${Array(b).fill(`<span>${e2}</span>`).join('')}</div></div>`;
   if(kind==='which'){
-    const ans = a>b?e1:e2;
-    return { prompt:`${e1} 和 ${e2}，哪一種比較多？`, speech:`${n1}和${n2}，哪一種比較多？`,
-      visual:rowsHtml, options:[{label:e1,value:e1},{label:e2,value:e2}], cols:2, big:true, answer:ans, t:{type:'more',kind,e1,e2,n1,n2,a,b},
-      detail:v=>`${e1}${a}個 ${e2}${b}個 選${v}比較多` };
+    if(equal){ a=b=rnd(3,9); }
+    const less = Math.random()<.4;
+    const rowsEq=`<div class="rows"><div class="r">${Array(a).fill(`<span>${e1}</span>`).join('')}</div><div class="r">${Array(b).fill(`<span>${e2}</span>`).join('')}</div></div>`;
+    const ans = a===b ? 'eq' : ((a>b)!==less ? e1 : e2);
+    return { prompt:`${e1} 和 ${e2}，哪一種比較<b style="color:#E8590C">${less?'少':'多'}</b>？`, speech:`${n1}和${n2}，哪一種比較${less?'少':'多'}？`,
+      visual:rowsEq, options:[{label:e1,value:e1},{label:e2,value:e2},{label:'一樣多',value:'eq',html:true}], cols:3, big:true, answer:ans,
+      t:{type:'more',kind,less,e1,e2,n1,n2,a,b},
+      detail:v=>`${e1}${a}個 ${e2}${b}個 問比較${less?'少':'多'} 選${v==='eq'?'一樣多':v}` };
   }
   const [bigE,smE,bigN,smN,bigC,smC] = a>b?[e1,e2,n1,n2,a,b]:[e2,e1,n2,n1,b,a];
   const ans=bigC-smC;
@@ -429,6 +478,93 @@ function genLen(kind){
     detail:v=>`最${long?'長':'短'} 選了${COLORS[v][1]}色` };
 }
 
+/* 高矮：腳對齊，最高／最矮 */
+function genTall(){
+  const hs=sample(range(3,10),3), tall=Math.random()<.6;
+  const target = tall ? hs.indexOf(Math.max(...hs)) : hs.indexOf(Math.min(...hs));
+  return { prompt:`哪一個最<b style="color:#E8590C">${tall?'高':'矮'}</b>？`, speech:`哪一個最${tall?'高':'矮'}？`,
+    visual:'', options:hs.map((H,i)=>({label:`<div class="vbox"><div class="vbar" style="height:${H*14}px;background:${COLORS[i][0]}"></div><span>${COLORS[i][1]}</span></div>`,value:i,html:true})),
+    cols:3, answer:target, t:{type:'tall',hs,target,tall},
+    detail:v=>`最${tall?'高':'矮'} 選了${COLORS[v][1]}色` };
+}
+/* 怎樣比高矮才公平（腳要對齊） */
+function tallCard(aligned,lab){
+  return `<div class="tcardT"><b>${lab}</b><div class="vpair"><div class="vbar" style="height:110px;background:#E53935"></div>
+    <div class="vcol"><div class="vbar mvT" style="height:90px;background:#1E88E5"></div><div class="step" style="height:${aligned?0:44}px"></div></div></div><div class="ground"></div></div>`;
+}
+function genFairTall(){
+  const fairFirst=Math.random()<.5;
+  return { prompt:'比高矮，哪一種比法才<b style="color:#E8590C">公平</b>？', speech:'比高矮，哪一種比法才公平？',
+    visual:'', options:[{label:tallCard(fairFirst,'Ａ'),value:'A',html:true},{label:tallCard(!fairFirst,'Ｂ'),value:'B',html:true}], cols:2, answer:fairFirst?'A':'B',
+    t:{type:'fairT',fairFirst}, detail:v=>`公平比高矮（腳對齊）選了墊高的那個` };
+}
+/* 厚薄：書的側面 */
+const BOOKC=[['#8E24AA','紫'],['#00897B','綠'],['#F4511E','橘']];
+function genThick(){
+  const ts=sample([8,16,24,34,44],3), thick=Math.random()<.6;
+  const target = thick ? ts.indexOf(Math.max(...ts)) : ts.indexOf(Math.min(...ts));
+  return { prompt:`哪一本書最<b style="color:#E8590C">${thick?'厚':'薄'}</b>？`, speech:`哪一本書最${thick?'厚':'薄'}？`,
+    visual:'', options:ts.map((T,i)=>({label:`<div class="book" style="height:${T}px;background:${BOOKC[i][0]}"></div><span class="lbl">${BOOKC[i][1]}</span>`,value:i,html:true})),
+    cols:1, len:true, answer:target, t:{type:'thick',ts,target,thick},
+    detail:v=>`最${thick?'厚':'薄'} 選了${BOOKC[v][1]}色` };
+}
+/* 直線和曲線 */
+const STRAIGHTS=['M15 30 L125 30','M15 50 L125 10','M20 10 L120 50','M15 45 L125 45'];
+const CURVES=['M15 45 Q70 -15 125 45','M15 30 Q45 0 70 30 T125 30','M15 15 C50 70 90 -20 125 45','M15 40 Q70 70 125 15'];
+const lineSvg=(d,col='#4A3728')=>`<svg viewBox="0 0 140 60" width="140" height="60"><path d="${d}" stroke="${col}" stroke-width="6" fill="none" stroke-linecap="round"/></svg>`;
+function genLine(){
+  const askStraight=Math.random()<.5;
+  const lines = askStraight ? [{d:pick(STRAIGHTS),k:'s'}, ...sample(CURVES,2).map(d=>({d,k:'c'}))]
+                            : [{d:pick(CURVES),k:'c'}, ...sample(STRAIGHTS,2).map(d=>({d,k:'s'}))];
+  const L=shuffle(lines), target=L.findIndex(x=>x.k===(askStraight?'s':'c'));
+  return { prompt:`哪一條是<b style="color:#E8590C">${askStraight?'直線':'曲線'}</b>？`, speech:`哪一條是${askStraight?'直線':'曲線'}？`,
+    visual:'', options:L.map((x,i)=>({label:lineSvg(x.d),value:i,html:true})), cols:1, answer:target,
+    t:{type:'line',L,target,askStraight}, detail:v=>`找${askStraight?'直線':'曲線'} 選了${L[v].k==='s'?'直線':'曲線'}` };
+}
+/* 頭尾一樣，直線和曲線哪條長 */
+function genLineLong(){
+  const curveRed=Math.random()<.5, long=Math.random()<.6, h=rnd(70,100);
+  const cs=curveRed?['#E53935','#1E88E5']:['#1E88E5','#E53935'];   // [曲線色, 直線色]
+  const nm=c=>c==='#E53935'?'紅':'藍';
+  const curveName=nm(cs[0]), lineName=nm(cs[1]);
+  const svg=`<svg viewBox="0 0 300 130" width="300" height="130"><path d="M30 110 Q150 ${110-2*h} 270 110" stroke="${cs[0]}" stroke-width="6" fill="none" stroke-linecap="round"/>
+    <path d="M30 110 L270 110" stroke="${cs[1]}" stroke-width="6" fill="none" stroke-linecap="round"/><circle cx="30" cy="110" r="7" fill="#4A3728"/><circle cx="270" cy="110" r="7" fill="#4A3728"/></svg>`;
+  const ans = long ? curveName : lineName;
+  return { prompt:`哪一條線比較<b style="color:#E8590C">${long?'長':'短'}</b>？`, speech:`哪一條線比較${long?'長':'短'}？`,
+    visual:svg, options:[{label:'<span style="color:#E53935">紅色的線</span>',value:'紅',html:true},{label:'<span style="color:#1E88E5">藍色的線</span>',value:'藍',html:true}], cols:2, answer:ans,
+    t:{type:'linelong',h,cs,curveName,lineName,long}, detail:v=>`頭尾一樣比${long?'長':'短'} 選了${v===curveName?'曲線':'直線'}` };
+}
+/* 第幾個 vs 幾個：點選塗色 */
+function genNth(kind){
+  const em=pick(['🐶','🐱','🐰','🐻','🐥']), k=rnd(2,6), many=kind==='many';
+  const ans = many ? range(0,k-1).join(',') : String(k-1);
+  return { prompt:`從左邊數，把${many?`<b style="color:#E8590C">前面 ${k} 隻</b>`:`<b style="color:#E8590C">第 ${k} 隻</b>`}塗上顏色`,
+    speech:`從左邊鼠，把${many?`前面${k}隻`:`第${k}隻`}塗上顏色，塗好了按好了`,
+    custom:true, build:buildNth, em, answer:ans, t:{type:'nth',em,k,many},
+    detail:v=>{ const sel=v?String(v).split(',').map(Number):[];
+      if(!many && sel.length===k && sel.every((x,i)=>x===i)) return `第${k}隻 → 塗了前面${k}隻（第幾個和幾個分不清）`;
+      if(many && sel.length===1 && sel[0]===k-1) return `前面${k}隻 → 只塗第${k}隻（第幾個和幾個分不清）`;
+      return `${many?`前面${k}隻`:`第${k}隻`} → 塗了${sel.length}隻`; } };
+}
+function buildNth(q, area, submit){
+  const on=new Set();
+  area.innerHTML=`<div class="take"><div class="sides"><span>⬅ 左邊</span><span>右邊 ➡</span></div>
+    <div class="nthrow">${Array(7).fill(0).map((_,i)=>`<button class="nth" data-i="${i}">${q.em}</button>`).join('')}</div>
+    <div class="take-btns"><button id="nthReset">↩ 重來</button><button class="okb" id="nthOk">✅ 好了</button></div></div>`;
+  area.querySelectorAll('.nth').forEach(b=>b.onclick=()=>{ const i=+b.dataset.i; if(on.has(i)){on.delete(i);b.classList.remove('on');} else {on.add(i);b.classList.add('on');} });
+  $('nthReset').onclick=()=>{ on.clear(); area.querySelectorAll('.nth').forEach(b=>b.classList.remove('on')); };
+  $('nthOk').onclick=()=>submit([...on].sort((a,b)=>a-b).join(','));
+}
+/* 夠不夠 */
+const ENOUGH=[['🧒','🧢','小朋友','帽子','戴','頂'],['🐰','🥕','兔子','紅蘿蔔','吃','根'],['🧒','✂️','小朋友','剪刀','拿','把'],['🐶','🦴','小狗','骨頭','吃','根'],['🧒','🍦','小朋友','冰淇淋','吃','支']];
+function genEnough(ok){
+  const [p,it,pn,itn,vb,ql]=pick(ENOUGH), a=rnd(3,7), b= ok ? a+rnd(0,1) : a-rnd(1,2);
+  return { prompt:`一${pn==='小朋友'?'個人':'隻'+pn}${vb}一${ql}${itn}，${itn}夠不夠？`, speech:`一${pn==='小朋友'?'個人':'隻'+pn}${vb}一${ql}${itn}，${itn}夠不夠？`,
+    visual:`<div class="enough"><div class="er1">${Array(a).fill(`<span>${p}</span>`).join('')}</div><div class="er2">${Array(b).fill(`<span>${it}</span>`).join('')}</div></div>`,
+    options:[{label:'夠',value:'ok'},{label:'不夠',value:'no'}], cols:2, big:true, answer: b>=a?'ok':'no',
+    t:{type:'enough',p,it,pn,itn,a,b}, detail:v=>`${p}${a} ${it}${b} 答${v==='ok'?'夠':'不夠'}` };
+}
+
 const SH={ box:['📦','🎁','🧊'], can:['🥫','🧻','🥁'], ball:['⚽','🏀','🏐'] };
 const SHQ=[
   ['哪一個最容易滾動？','ball'], ['哪一個可以疊高，也可以滾動？','can'],
@@ -445,35 +581,47 @@ function genShape(i){
 /* ========== 關卡設定 ========== */
 const LEVELS=[
   { id:'count', em:'🍎', name:'數一數', unit:'單元1 10以內的數', concept:'點數 1～10（一個一個數）',
-    make:()=>range(1,5).map(genCount),
+    make:()=>range(1,4).map(genCount),
     tip:'吃點心前一起數：手指一個一個點、嘴巴一個一個念，點一個念一個。' },
   { id:'take', em:'🍪', name:'拿出來', unit:'單元1 10以內的數', concept:'看到數字→拿出那麼多',
-    make:()=>range(1,5).map(genTake),
+    make:()=>range(1,4).map(genTake),
     tip:'說一個數字請他拿出來（湯匙、餅乾、積木），拿完再一起點數一次對不對。' },
-  { id:'seq', em:'🔢', name:'數字排隊', unit:'單元3 排順序、比多少', concept:'1～10 的順序、比大小',
-    make:()=>shuffle([genSeq('seq'),genSeq('seq'),genSeq('seq'),genSeq('cmp'),genSeq('cmp')]),
-    tip:'上下樓梯一起數 1～10，也倒著數 10～1；問他「6 和 8 哪個大？」。' },
-  { id:'ord', em:'🐶', name:'第幾個', unit:'單元3 排順序、比多少', concept:'從左／右數第幾個',
-    make:()=>range(1,5).map(genOrd),
-    tip:'先確認哪隻是右手；排玩具、排隊時問「從左邊數第 3 個是誰？」。' },
-  { id:'more', em:'🐰', name:'比多少', unit:'單元3 排順序、比多少', concept:'誰比較多、多幾個',
-    make:()=>shuffle([genMore('which'),genMore('which'),genMore('diff'),genMore('diff'),genMore('diff')]),
-    tip:'兩排東西一個對一個排好，看「多出來、沒有配對的」有幾個。' },
-  { id:'bean', em:'🥤', name:'藏豆子', unit:'單元4 分與合', concept:'5～10 分成兩堆（分與合）',
-    make:()=>range(1,5).map(genBean),
-    tip:'玩藏豆子：拿 7 顆豆子，手藏一些，讓他看外面剩幾顆、猜手裡有幾顆；每天換數字 5～10。' },
   { id:'len', em:'📏', name:'比長短', unit:'單元2 比長短', concept:'一端對齊再比長短',
     make:()=>shuffle([genLen('long'),genLen('long'),genLen('long'),genLen('fair'),genLen('fair')]),
     tip:'比鉛筆、比筷子：先把一端對齊，再看另一端誰比較遠。' },
+  { id:'tall', em:'📚', name:'高矮厚薄', unit:'單元2 比長短', concept:'腳對齊比高矮、比厚薄',
+    make:()=>shuffle([genTall(),genTall(),genFairTall(),genThick(),genThick()]),
+    tip:'家人背靠牆、腳跟對齊比高矮；拿兩本書看側面，比誰厚誰薄。' },
+  { id:'line', em:'〰️', name:'直線曲線', unit:'單元2 比長短', concept:'直線／曲線、頭尾一樣曲線較長',
+    make:()=>shuffle([genLine(),genLine(),genLine(),genLineLong(),genLineLong()]),
+    tip:'用繩子擺直的、擺彎的；頭尾放一樣的地方，拉直比比看哪條長。' },
+  { id:'seq', em:'🔢', name:'數字排隊', unit:'單元3 排順序、比多少', concept:'1～10 的順序、前後、比大小',
+    make:()=>shuffle([genSeq('seq'),genSeq('seq'),genSeq('nb'),genSeq('cmp'),genSeq('cmp')]),
+    tip:'上下樓梯一起數 1～10，也倒著數；問他「5 的後面是幾？」「6 和 8 哪個大？」。' },
+  { id:'ord', em:'🐶', name:'第幾個', unit:'單元3 排順序、比多少', concept:'從左／右、上／下數第幾個',
+    make:()=>shuffle([genOrd(),genOrd(),genOrd(),genOrdV(),genOrdV()]),
+    tip:'先確認哪隻是右手；排玩具時問「從左邊數第 3 個是誰？」，疊積木問「從上面數第 2 個」。' },
+  { id:'nth', em:'🖍️', name:'第幾個和幾個', unit:'單元3 排順序、比多少', concept:'「第4隻」和「前面4隻」不一樣',
+    make:()=>shuffle([genNth('one'),genNth('many'),genNth('one'),genNth('many'),pick([genNth('one'),genNth('many')])]),
+    tip:'排 6 個玩具，請他「拿第 3 個」（只拿一個）和「拿前面 3 個」（拿三個），說說哪裡不一樣。' },
+  { id:'more', em:'🐰', name:'比多少', unit:'單元3 排順序、比多少', concept:'比較多／少、一樣多、多幾個',
+    make:()=>shuffle([genMore('which',true),genMore('which'),genMore('which'),genMore('diff'),genMore('diff')]),
+    tip:'兩排東西一個對一個排好，看「多出來、沒有配對的」有幾個；都配完就是一樣多。' },
+  { id:'enough', em:'🧢', name:'夠不夠', unit:'單元3 排順序、比多少', concept:'一個對一個，判斷夠不夠',
+    make:()=>shuffle([genEnough(true),genEnough(false),genEnough(true),genEnough(false)]),
+    tip:'擺碗筷時問：一個人一雙筷子，筷子夠不夠？讓他一個一個發發看。' },
+  { id:'bean', em:'🥤', name:'藏豆子', unit:'單元4 分與合', concept:'5～10 分成兩堆（分與合）',
+    make:()=>range(1,5).map(genBean),
+    tip:'玩藏豆子：拿 7 顆豆子，手藏一些，讓他看外面剩幾顆、猜手裡有幾顆；每天換數字 5～10。' },
   { id:'shape', em:'⚽', name:'滾滾疊疊', unit:'單元5 方盒、圓罐、球', concept:'會滾／會疊、平面和曲面',
-    make:()=>sample(range(0,5),5).map(genShape),
+    make:()=>sample(range(0,5),4).map(genShape),
     tip:'家裡找盒子、罐子、球，讓他自己試試看哪個會滾、哪個能疊。' },
 ];
 
 /* ========== 首頁 ========== */
 function drawHome(){
   $('lvGrid').innerHTML = LEVELS.map((L,i)=>{
-    const r=cur.levels[L.id]; const done = r && r.done>=5;
+    const r=cur.levels[L.id]; const done = r && r.done>=(r.total||5);
     return `<button class="lv-card" data-i="${i}"><span class="no">第${i+1}關</span>${done?'<span class="ok">⭐</span>':''}
       <div class="em">${L.em}</div><div class="nm">${L.name}</div></button>`;
   }).join('');
@@ -486,7 +634,7 @@ let allMode=false, li=0, qs=[], qi=0, tries=0, rec=null, busy=false;
 
 function startLevel(i){
   li=i; const L=LEVELS[i]; qs=L.make(); qi=0;
-  rec = cur.levels[L.id] = { first:0, done:0, wrong:[] }; saveAll(sessions);
+  rec = cur.levels[L.id] = { first:0, done:0, wrong:[], total:qs.length }; saveAll(sessions);
   $('lvName').textContent = `第${i+1}關 ${L.name}`;
   show('game'); showQ();
 }
@@ -496,8 +644,8 @@ function showQ(){
   const q=qs[qi]; tries=0; busy=false;
   drawDots();
   $('promptTxt').innerHTML=q.prompt; $('fb').textContent=''; $('fb').className='feedback';
-  const stage=$('stage'); stage.className = q.ord?'ord':(q.shapes?'shapes':''); stage.innerHTML='';
-  if(q.custom){ buildTake(q, stage, v=>answer(v,null)); say(q.speech); return; }
+  const stage=$('stage'); stage.className = q.ord?'ord':(q.shapes?'shapes':(q.vert?'vert':'')); stage.innerHTML='';
+  if(q.custom){ (q.build||buildTake)(q, stage, v=>answer(v,null)); say(q.speech); return; }
   const vis=document.createElement('div'); vis.className='visual'; vis.innerHTML=q.visual;
   if(q.visual) stage.appendChild(vis);
   const opts=document.createElement('div'); opts.className='opts';
@@ -511,6 +659,7 @@ function showQ(){
     opts.appendChild(b);
   });
   stage.appendChild(opts);
+  if(q.after) stage.insertAdjacentHTML('beforeend', q.after);
   q.showAnswer=()=>{ [...opts.children].forEach(b=>{ if(String(b.dataset.v)===String(q.answer)) b.classList.add('right'); }); };
   if(q.bean){ stage.classList.add('lock'); buildBean(q, stage, ()=>stage.classList.remove('lock')); }
   say(q.speech);
@@ -528,8 +677,9 @@ function answer(v, btn){
     return;
   }
   tries++;
-  if(tries===1){
-    rec.wrong.push(q.detail(v)); saveAll(sessions);
+  if(tries===1){ rec.wrong.push(q.detail(v)); saveAll(sessions); }
+  const left = q.options ? q.options.length - tries : 99;   // 還沒點過的選項
+  if(tries===1 && left>1){
     if(btn) btn.classList.add('tried');
     $('fb').className='feedback soft'; $('fb').textContent='再想想看～慢慢來 💪'; say('再想想看，慢慢來');
     return;
@@ -547,13 +697,14 @@ function nextQ(){
   drawDots();
   const last = li===LEVELS.length-1;
   $('endTitle').textContent = `第${li+1}關 ${LEVELS[li].name} 完成！`;
-  $('endMsg').textContent = last ? '8 關全部闖完了，你超棒！🏆' : pick(['你很認真喔！','越玩越厲害！','繼續加油！']);
+  $('endMsg').textContent = last ? `${LEVELS.length} 關全部闖完了，你超棒！🏆` : pick(['你很認真喔！','越玩越厲害！','繼續加油！']);
   $('btnNext').style.display = last ? 'none' : '';
   $('btnNext').textContent = allMode ? '下一關 ➜' : `第${li+2}關 ${last?'':LEVELS[li+1].name} ➜`;
-  const allRight = rec.done===5 && rec.first===5;
+  const allRight = rec.done===qs.length && rec.first===qs.length;
   $('cert').style.display = allRight ? '' : 'none';
   if(allRight){
     rec.cert = true; saveAll(sessions);
+    $('certN').textContent = qs.length;
     $('certLv').textContent = `第${li+1}關「${LEVELS[li].name}」`;
     $('certDate').textContent = fmtTime(Date.now()).split(' ')[0];
     $('endMsg').textContent = '全部答對！你拿到一張獎狀 🏅';
@@ -638,16 +789,18 @@ const TEACH={
     it[idx].classList.add('ans');
     await S(`從${side}邊數第 <b>${k}</b> 個，就是 ${row[idx]}！`, `從${side}邊鼠第${k}個，就是牠！`);
   },
-  async more({kind,e1,e2,n1,n2,a,b},vis,S,P){
+  async more({kind,less,e1,e2,n1,n2,a,b},vis,S,P){
     vis.innerHTML=`<div class="rows"><div class="r">${Array(a).fill(`<span class="rel">${e1}</span>`).join('')}</div><div class="r">${Array(b).fill(`<span class="rel">${e2}</span>`).join('')}</div></div>`;
     const [r1,r2]=[...vis.querySelectorAll('.r')].map(r=>r.children);
     const m=Math.min(a,b), d=Math.abs(a-b);
     await S('一個對一個，配成一對 🤝');
     for(let i=0;i<m;i++){ r1[i].classList.add('pair'); r2[i].classList.add('pair'); await P(450); }
+    if(d===0){ await S('全部都配到了，<b>沒有多出來</b>的，所以<b>一樣多</b>！', '全部都配到了，沒有多出來的，所以一樣多'); return; }
     const long=a>b?r1:r2, [bigE,smE,bigN,smN]=a>b?[e1,e2,n1,n2]:[e2,e1,n2,n1];
     await S('沒有配到的，就是<b>多出來</b>的');
     for(let i=0;i<d;i++){ long[m+i].classList.add('lit'); badge(long[m+i],i+1); await S(`${i+1}`); }
-    if(kind==='which') await S(`${bigE} 有多出來，所以 <b>${bigE} 比較多</b>！`, `${bigN}有多出來，所以${bigN}比較多`);
+    if(kind==='which' && less) await S(`${bigE} 有多出來，${smE} 不夠配，所以 <b>${smE} 比較少</b>！`, `${bigN}有多出來，${smN}不夠配，所以${smN}比較少`);
+    else if(kind==='which') await S(`${bigE} 有多出來，所以 <b>${bigE} 比較多</b>！`, `${bigN}有多出來，所以${bigN}比較多`);
     else await S(`多出來 <b>${d}</b> 個，所以 ${bigE} 比 ${smE} 多 <b>${d}</b> 個！`, `多出來${d}個，所以${bigN}比${smN}多${d}個`);
   },
   async bean({n,out,hid},vis,S){
@@ -660,6 +813,87 @@ const TEACH={
     for(let i=0;i<hid;i++){ badge(hb[i],i+1); await S(`${i+1}`); }
     bond.innerHTML=`<b>${n}</b> 可以分成 <b>${out}</b> 和 <b class="hidc">${hid}</b>`; bond.style.visibility='visible';
     await S(`杯子裡有 <b>${hid}</b> 顆。${n} 可以分成 ${out} 和 ${hid}！`);
+  },
+  async nb({x,after},vis,S){
+    vis.innerHTML=`<div class="numrow small">${range(1,10).map(n=>`<div>${n}</div>`).join('')}</div>`;
+    const bx=vis.querySelectorAll('.numrow div');
+    await S('數字排隊，從 1 排到 10');
+    bx[x-1].classList.add('mk1'); await S(`${x} 在這裡`);
+    const ans=after?x+1:x-1; bx[ans-1].classList.add('ans');
+    await S(`${x} 的${after?'後面':'前面'}，就是 <b>${ans}</b>！`, `${x}的${after?'後面':'前面'}，就是${ans}`);
+  },
+  async ordv({col,fromTop,k,idx},vis,S){
+    vis.innerHTML=`<div class="vlabel">⬆ 上面</div><div class="ordcol">${col.map(a=>`<span class="rel">${a}</span>`).join('')}</div><div class="vlabel">⬇ 下面</div>`;
+    const lb=vis.querySelectorAll('.vlabel'), it=vis.querySelectorAll('.ordcol span');
+    const side=fromTop?'上':'下';
+    lb[fromTop?0:1].classList.add('sidelit');
+    await S(`先找到<b>${side}面</b>，從這一頭開始數`, `先找到${side}面，從這一頭開始鼠`);
+    for(let j=1;j<=k;j++){ const i=fromTop?j-1:6-j; it[i].classList.add('lit'); badge(it[i],j); await S(`第${j}個`); }
+    it[idx].classList.add('ans');
+    await S(`第 <b>${k}</b> 個，就是 ${col[idx]}！`, `第${k}個，就是牠！`);
+  },
+  async nth({em,k,many},vis,S){
+    vis.innerHTML=`<div class="sides"><span class="sidelit">⬅ 左邊</span><span>右邊 ➡</span></div><div class="nthrow">${Array(7).fill(0).map(()=>`<span class="nth rel">${em}</span>`).join('')}</div>`;
+    const it=vis.querySelectorAll('.nth');
+    await S('從左邊開始數', '從左邊開始鼠');
+    for(let j=1;j<=k;j++){ badge(it[j-1],j); if(many) it[j-1].classList.add('on'); await S(`${j}`); }
+    if(many) await S(`<b>前面 ${k} 隻</b>：1 到 ${k} <b>全部</b>都要塗，總共 ${k} 隻`, `前面${k}隻，一到${k}全部都要塗，總共${k}隻`);
+    else { it[k-1].classList.add('on'); await S(`<b>第 ${k} 隻</b>：只有數到 ${k} 的<b>那一隻</b>`, `第${k}隻，只有鼠到${k}的那一隻`); }
+  },
+  async enough({p,it,itn,a,b},vis,S,P){
+    vis.innerHTML=`<div class="rows"><div class="r">${Array(a).fill(`<span class="rel">${p}</span>`).join('')}</div><div class="r">${Array(b).fill(`<span class="rel">${it}</span>`).join('')}</div></div>`;
+    const [r1,r2]=[...vis.querySelectorAll('.r')].map(r=>r.children);
+    await S('一個對一個，發給每一個 🤝');
+    for(let i=0;i<Math.min(a,b);i++){ r1[i].classList.add('pair'); r2[i].classList.add('pair'); await P(450); }
+    if(b>=a) await S(`每一個都拿到了，所以<b>夠</b>！`);
+    else { for(let i=b;i<a;i++){ r1[i].classList.add('lit'); badge(r1[i],'?'); } await S(`有人沒拿到${itn}，所以<b>不夠</b>！`); }
+  },
+  async tall({hs,target,tall},vis,S){
+    vis.innerHTML=`<div class="vbars">${hs.map((H,i)=>`<div class="vbox"><div class="vbar tvb" style="height:${H*14}px;background:${COLORS[i][0]}"></div><span>${COLORS[i][1]}</span></div>`).join('')}</div><div class="ground on"></div>`;
+    const bars=vis.querySelectorAll('.tvb');
+    await S('腳都站在同一條線上，<b>對齊</b>了 👍');
+    await S(`看上面，誰的頭最${tall?'高':'低'}？`);
+    bars.forEach((b,i)=>{ if(i!==target) b.classList.add('fade'); }); bars[target].classList.add('ans');
+    await S(`<b>${COLORS[target][1]}色</b>最${tall?'高':'矮'}！`);
+  },
+  async fairT({fairFirst},vis,S,P){
+    vis.innerHTML=`<div class="tpair">${tallCard(fairFirst,'Ａ')}${tallCard(!fairFirst,'Ｂ')}</div>`;
+    const cards=vis.querySelectorAll('.tcardT'), good=cards[fairFirst?0:1], bad=cards[fairFirst?1:0];
+    const g=fairFirst?'A':'B', w=fairFirst?'B':'A';
+    await S('比高矮，<b>腳要對齊</b>，站在同一個地方');
+    good.classList.add('ans'); await S(`${g} 腳對齊，才公平 ✅`, `${g}腳對齊，才公平`);
+    bad.classList.add('bad'); await S(`${w} 的藍色站在箱子上，不公平`);
+    bad.querySelector('.step').style.height='0px';
+    await P(900);
+    await S('拿掉箱子，就看出<b>紅色比較高</b>了！');
+  },
+  async thick({ts,target,thick},vis,S){
+    vis.innerHTML=`<div class="bookstack">${ts.map((T,i)=>`<div class="bookrow"><div class="book tbk" style="height:${T}px;background:${BOOKC[i][0]}"></div><span>${BOOKC[i][1]}</span></div>`).join('')}</div>`;
+    const bk=vis.querySelectorAll('.tbk');
+    await S('看書的<b>側面</b>，看誰比較胖、誰比較瘦');
+    bk.forEach((b,i)=>{ if(i!==target) b.classList.add('fade'); }); bk[target].classList.add('ans');
+    await S(`<b>${BOOKC[target][1]}色</b>的書最${thick?'厚':'薄'}！`);
+  },
+  async line({L,target,askStraight},vis,S){
+    vis.innerHTML=`<div class="linelist">${L.map(x=>`<div class="lrow">${lineSvg(x.d)}<b style="visibility:hidden">${x.k==='s'?'直線':'曲線'}</b></div>`).join('')}</div>`;
+    const rows=vis.querySelectorAll('.lrow');
+    await S('<b>直直的</b>叫直線，<b>彎彎的</b>叫曲線');
+    for(const r of rows){ const b=r.querySelector('b'); b.style.visibility='visible'; await S(b.textContent); }
+    rows[target].classList.add('ans');
+    await S(`這一條是<b>${askStraight?'直線':'曲線'}</b>！`);
+  },
+  async linelong({h,cs,curveName,lineName,long},vis,S,P){
+    vis.innerHTML=`<svg viewBox="0 0 300 130" width="300" height="130"><path id="cv" d="M30 110 Q150 ${110-2*h} 270 110" stroke="${cs[0]}" stroke-width="6" fill="none"/><path d="M30 110 L270 110" stroke="${cs[1]}" stroke-width="6" fill="none"/><circle cx="30" cy="110" r="7" fill="#4A3728"/><circle cx="270" cy="110" r="7" fill="#4A3728"/></svg><div class="lenbox" style="visibility:hidden"><div class="startline on"></div><div class="bar tbar cvb"></div><div class="bar tbar lnb"></div></div>`;
+    const len=vis.querySelector('#cv').getTotalLength(), sc=280/len;
+    const cb=vis.querySelector('.cvb'), lb=vis.querySelector('.lnb');
+    cb.style.background=cs[0]; cb.style.width=(len*sc)+'px'; cb.textContent=curveName+'（曲線）';
+    lb.style.background=cs[1]; lb.style.width=(240*sc)+'px'; lb.textContent=lineName+'（直線）';
+    await S('頭和尾都在<b>一樣的地方</b>');
+    await S(`${curveName}色的曲線彎彎的，<b>繞了遠路</b>`);
+    vis.querySelector('.lenbox').style.visibility='visible';
+    await S('把線拉直，左邊對齊比比看');
+    (long?cb:lb).classList.add('ans');
+    await S(long?`曲線比較長，所以 <b>${curveName}色</b> 比較長！`:`直線比較短，所以 <b>${lineName}色</b> 比較短！`);
   },
   async len({lens,target,long},vis,S){
     vis.innerHTML=`<div class="lenbox"><div class="startline"></div>${lens.map((L,i)=>`<div class="bar tbar" style="width:${L*24}px;background:${COLORS[i][0]}">${COLORS[i][1]}</div>`).join('')}</div>`;
@@ -694,22 +928,22 @@ const TEACH={
 
 /* ========== 大人看結果 ========== */
 function statusOf(r){
-  if(!r || r.done===0) return ['s-none','—未玩'];
+  if(!r || r.done===0) return ['s-none','—未玩','—'];
   const p=r.first/r.done;
-  if(p>=0.8) return ['s-ok','✅會了'];
-  if(p>=0.4) return ['s-mid','⚠️不穩'];
-  return ['s-bad','❌要補'];
+  if(p>=0.8) return ['s-ok','✅會了','✅'];
+  if(p>=0.4) return ['s-mid','⚠️不穩','⚠️'];
+  return ['s-bad','❌要補','❌'];
 }
-const PRIORITY=['count','take','bean','seq','more','ord','len','shape'];
+const PRIORITY=['count','take','bean','seq','more','enough','ord','nth','len','tall','line','shape'];
 function fmtTime(t){ const d=new Date(t); return `${d.getFullYear()}/${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`; }
 
 function drawReport(s){
   const played = LEVELS.filter(L=>s.levels[L.id] && s.levels[L.id].done>0);
   const rows = LEVELS.map((L,i)=>{
-    const r=s.levels[L.id]; const [cls,st]=statusOf(r);
+    const r=s.levels[L.id]; const [cls,,icon]=statusOf(r);
     const sc = r && r.done ? `${r.first}/${r.done}` : '';
     const wr = r && r.wrong.length ? r.wrong.slice(0,2).join('<br>') : (r&&r.done?'—':'');
-    return `<tr class="${cls}"><td class="st">${st}</td><td><span class="u">${L.unit}</span>${i+1}. ${L.name}：${L.concept}</td><td class="sc">${sc}</td><td class="wr">${wr}</td></tr>`;
+    return `<tr class="${cls}"><td class="st">${icon}</td><td><span class="u">${L.unit.split(" ")[0]}</span>${i+1}. ${L.name}：${L.concept}</td><td class="sc">${sc}</td><td class="wr">${wr}</td></tr>`;
   }).join('');
   let focus;
   const weak = played.map(L=>({L, p:s.levels[L.id].first/s.levels[L.id].done}))
@@ -719,20 +953,21 @@ function drawReport(s){
   else if(!weak.length) focus='<b>玩過的關卡都會了！</b> 可以再玩「湊十大挑戰」，或把沒玩的關卡玩完。';
   else focus=`<b>最該先補：${weak[0].L.name}（${weak[0].L.unit}）</b><br>在家這樣玩：${weak[0].L.tip}`;
   $('rpBody').innerHTML = `
-    <div class="rp-head"><div class="sun"><img src="logo.png" alt=""></div><h2>一年級數感闖關 · 結果<small>${fmtTime(s.start)}　玩了 ${played.length}/8 關　（答對＝第一次就答對）</small></h2></div>
-    <table class="rp"><tr><th>狀態</th><th>單元／觀念</th><th>答對</th><th>錯在哪</th></tr>${rows}</table>
+    <div class="rp-head"><div class="sun"><img src="logo.png" alt=""></div><h2>一年級數感闖關 · 結果<small>${fmtTime(s.start)}　玩了 ${played.length}/${LEVELS.length} 關</small></h2></div>
+    <div class="rp-legend">✅會了　⚠️不穩　❌要補　—未玩　（答對＝第一次就答對）</div>
+    <table class="rp"><tr><th></th><th>單元／觀念</th><th>答對</th><th>錯在哪</th></tr>${rows}</table>
     <div class="rp-focus">${focus}</div>
     ${(()=>{ const c=LEVELS.map((L,i)=>s.levels[L.id]&&s.levels[L.id].cert?`第${i+1}關 ${L.name}`:null).filter(Boolean); return c.length?`<div class="rp-focus" style="border-color:var(--green)">🏅 <b>拿到獎狀：</b>${c.join('、')}</div>`:''; })()}
     <div class="rp-note">錯了沒關係，陪他再試一次就好 😊　—— SUNNY 魔法數學</div>`;
   $('hist').innerHTML = sessions.length>1 ? '<b>以前的紀錄（點一下看）</b>' + sessions.slice().reverse().map((x,k)=>{
     const idx=sessions.length-1-k;
-    const icons=LEVELS.map(L=>statusOf(x.levels[L.id])[1].slice(0,1)).join('');
+    const icons=LEVELS.map(L=>statusOf(x.levels[L.id])[2]).join('');
     return `<div class="${x===s?'cur':''}" data-k="${idx}">${fmtTime(x.start)}　${icons}</div>`; }).join('') : '';
   document.querySelectorAll('#hist div[data-k]').forEach(d=>d.onclick=()=>drawReport(sessions[+d.dataset.k]));
 }
 
 /* ========== 按鈕 ========== */
-$('btnAll').onclick=()=>{ allMode=true; const next=LEVELS.findIndex(L=>!(cur.levels[L.id] && cur.levels[L.id].done>=5)); startLevel(next<0?0:next); };
+$('btnAll').onclick=()=>{ allMode=true; const next=LEVELS.findIndex(L=>!(cur.levels[L.id] && cur.levels[L.id].done>=(cur.levels[L.id].total||5))); startLevel(next<0?0:next); };
 $('btnSpk').onclick=()=>say(qs[qi].speech);
 $('btnQuit').onclick=()=>{ teachId++; speechSynthesis && speechSynthesis.cancel(); drawHome(); show('home'); };
 $('btnNext').onclick=()=>startLevel(li+1);
