@@ -157,13 +157,15 @@
   /* 獎狀：有 cert.png（阿居畫的底圖）就用圖，沒有就用 CSS 框 */
   .cert{ width:100%; max-width:340px; aspect-ratio:2/3; border-radius:14px; position:relative; animation:pop .8s;
     background:#FFF8ED; border:10px double var(--gold); box-shadow:0 0 0 4px var(--orange), 0 10px 24px rgba(0,0,0,.15); }
-  .cert.hasimg{ background:url(cert.png) center/100% 100% no-repeat; border:none; box-shadow:0 10px 24px rgba(0,0,0,.15); }
+  .cert.hasimg{ background:url(cert.jpg) center/100% 100% no-repeat; border:none; box-shadow:0 10px 24px rgba(0,0,0,.15); }
   .cert-in{ position:absolute; inset:20% 14% 16%; display:flex; flex-direction:column; align-items:center; justify-content:space-between; text-align:center; }
   .cert-title{ font-size:44px; font-weight:900; color:#C62828; letter-spacing:6px; }
   .cert-who{ font-size:24px; font-weight:900; color:var(--brown); border-bottom:3px solid var(--gold); padding:0 10px 2px; }
   .cert-body{ font-size:21px; font-weight:800; color:var(--brown); line-height:1.6; } .cert-body b{ color:var(--deep); }
   .cert-gift{ font-size:17px; font-weight:900; color:var(--green); }
-  .cert-foot{ font-size:13px; color:#9A6B3A; font-weight:700; line-height:1.5; }
+  .cert-foot{ position:absolute; left:0; right:0; bottom:5%; text-align:center; font-size:13px; color:#9A6B3A; font-weight:700; line-height:1.5; }
+  .cert.hasimg .cert-in{ inset:17% 13% 31%; }
+  .cert.hasimg .cert-foot{ left:13%; right:auto; top:73.5%; bottom:auto; text-align:left; font-size:12px; }
   .big-btn{ width:100%; max-width:340px; padding:16px; border-radius:18px; font-size:22px; font-weight:900;
     background:linear-gradient(135deg,#F9A81B,#F5820A); color:#fff; box-shadow:0 5px 0 #C9620A; }
   .big-btn.ghost{ background:#fff; color:var(--deep); box-shadow:0 5px 0 rgba(245,130,10,.25); }
@@ -204,7 +206,7 @@
     <button class="all-card" id="btnAll">🚀 全部闖關</button>
     <div class="lv-grid" id="lvGrid"></div>
     <button class="adult-btn" id="btnAdult">📋 大人看結果</button>
-    <div style="text-align:center;font-size:12px;color:#C9A57A;margin-top:4px">版本 v6</div>
+    <div style="text-align:center;font-size:12px;color:#C9A57A;margin-top:4px">版本 v7</div>
   </section>
 
   <!-- 遊戲 -->
@@ -231,8 +233,8 @@
           <div class="cert-who">數學小勇士</div>
           <div class="cert-body">闖過 <b id="certLv"></b><br>5 題全部答對！</div>
           <div class="cert-gift">🎁 拿給阿嬤看，可以領獎喔！</div>
-          <div class="cert-foot"><span id="certDate"></span><br>SUNNY 魔法數學</div>
         </div>
+        <div class="cert-foot"><span id="certDate"></span><br>SUNNY 魔法數學</div>
       </div>
       <button class="big-btn" id="btnNext">下一關 ➜</button>
       <button class="big-btn ghost" id="btnEndHome">回首頁</button>
@@ -739,7 +741,7 @@ $('btnAdult').onclick=()=>{ drawReport(cur); show('report'); };
 $('btnRpHome').onclick=()=>{ drawHome(); show('home'); };
 $('btnNewSess').onclick=()=>{ if(confirm('要開始新的一次測驗嗎？（舊的紀錄會保留在下面）')){ newSession(); drawHome(); show('home'); } };
 drawHome();
-(()=>{ const im=new Image(); im.onload=()=>$('cert').classList.add('hasimg'); im.src='cert.png'; })();
+(()=>{ const im=new Image(); im.onload=()=>$('cert').classList.add('hasimg'); im.src='cert.jpg'; })();
 </script>
 </body>
 </html>
