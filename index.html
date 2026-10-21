@@ -174,6 +174,17 @@
   .enough{ display:flex; flex-direction:column; gap:14px; background:#fff; border-radius:16px; padding:12px; width:300px; }
   .enough .er1{ display:flex; gap:14px; flex-wrap:wrap; font-size:28px; } .enough .er2{ display:flex; gap:4px; flex-wrap:wrap; font-size:30px; justify-content:flex-end; }
 
+  /* ---- 全對收集＋通關證書 ---- */
+  .collect{ margin:0 4px 12px; background:#fff; border-radius:16px; padding:10px 14px; box-shadow:0 4px 0 rgba(245,130,10,.15); }
+  .collect-txt{ font-size:17px; font-weight:900; color:var(--deep); text-align:center; }
+  .collect-bar{ height:14px; background:#FFE0B2; border-radius:7px; margin-top:6px; overflow:hidden; }
+  .collect-bar div{ height:100%; background:linear-gradient(90deg,#F9A81B,#E53935); border-radius:7px; transition:width .6s; }
+  .collect-end{ color:var(--deep) !important; font-weight:900 !important; }
+  .grand-btn{ width:100%; max-width:340px; margin:0 auto 12px; display:block; padding:16px; border-radius:18px; font-size:22px; font-weight:900;
+    color:#fff; background:linear-gradient(135deg,#E53935,#F5820A); box-shadow:0 5px 0 #B71C1C; animation:pop 1.2s infinite; }
+  .cert.grand .cert-title{ font-size:38px; letter-spacing:4px; }
+  .confetti{ font-size:30px; letter-spacing:6px; animation:pop 1s infinite; }
+
   /* ---- Level end ---- */
   .end-wrap{ flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px; text-align:center; }
   .end-wrap .stars{ font-size:56px; animation:pop .8s; }
@@ -229,10 +240,12 @@
     <div class="brand"><div class="sun"><img src="logo.png" alt=""></div><div class="txt">SUNNY<small>魔法數學</small></div></div>
     <div class="home-title">數感闖關</div>
     <div class="home-sub">✦ 一年級 · 12 個小關卡 ✦</div>
+    <div class="collect"><div class="collect-txt" id="collectTxt"></div><div class="collect-bar"><div id="collectFill"></div></div></div>
+    <button class="grand-btn" id="btnGrand" style="display:none">🏆 我的通關證書</button>
     <button class="all-card" id="btnAll">🚀 全部闖關</button>
     <div class="lv-grid" id="lvGrid"></div>
     <button class="adult-btn" id="btnAdult">📋 大人看結果</button>
-    <div style="text-align:center;font-size:12px;color:#C9A57A;margin-top:4px">版本 v8</div>
+    <div style="text-align:center;font-size:12px;color:#C9A57A;margin-top:4px">版本 v9</div>
   </section>
 
   <!-- 遊戲 -->
@@ -262,8 +275,28 @@
         </div>
         <div class="cert-foot"><span id="certDate"></span><br>SUNNY 魔法數學</div>
       </div>
+      <p class="collect-end" id="collectEnd"></p>
+      <button class="grand-btn" id="btnGetGrand" style="display:none">🏆 領通關證書！</button>
       <button class="big-btn" id="btnNext">下一關 ➜</button>
       <button class="big-btn ghost" id="btnEndHome">回首頁</button>
+    </div>
+  </section>
+
+  <!-- 通關證書 -->
+  <section class="screen" id="grand">
+    <div class="end-wrap">
+      <div class="confetti" aria-hidden="true">🎉🎊⭐🎉🎊⭐</div>
+      <h2>全部通關成功！🏆</h2>
+      <div class="cert grand">
+        <div class="cert-in">
+          <div class="cert-title">通關證書</div>
+          <div class="cert-who">數學小勇士</div>
+          <div class="cert-body">一年級數感闖關<br><b id="gN">12</b> 關全部全對！</div>
+          <div class="cert-gift">🎁 拿給阿嬤看，可以領大獎喔！</div>
+        </div>
+        <div class="cert-foot"><span id="gDate"></span><br>SUNNY 魔法數學</div>
+      </div>
+      <button class="big-btn ghost" id="btnGrandHome">回首頁</button>
     </div>
   </section>
 
@@ -328,6 +361,13 @@ function ensureSession(){
   if(last && Date.now()-last.start < 3*3600*1000){ cur = last; } else newSession();
 }
 ensureSession();
+
+const BKEY='g1sense_badges';
+let badges=(()=>{ try{ return JSON.parse(localStorage.getItem(BKEY))||{}; }catch(e){ return {}; } })();
+function saveBadges(){ try{ localStorage.setItem(BKEY, JSON.stringify(badges)); }catch(e){} }
+// 以前紀錄裡拿過的單關獎狀也算進來
+sessions.forEach(x=>Object.keys(x.levels||{}).forEach(id=>{ if(x.levels[id].cert && !badges[id]) badges[id]=x.start; }));
+saveBadges();
 
 /* ========== 題目產生 ========== */
 const FRUITS=['🍎','🍓','🍊','🍌','🍇','🍒','🍐','🍋'];
@@ -622,9 +662,13 @@ const LEVELS=[
 function drawHome(){
   $('lvGrid').innerHTML = LEVELS.map((L,i)=>{
     const r=cur.levels[L.id]; const done = r && r.done>=(r.total||5);
-    return `<button class="lv-card" data-i="${i}"><span class="no">第${i+1}關</span>${done?'<span class="ok">⭐</span>':''}
+    return `<button class="lv-card" data-i="${i}"><span class="no">第${i+1}關</span>${badges[L.id]?'<span class="ok">🏅</span>':(done?'<span class="ok">⭐</span>':'')}
       <div class="em">${L.em}</div><div class="nm">${L.name}</div></button>`;
   }).join('');
+  const got=LEVELS.filter(L=>badges[L.id]).length;
+  $('collectTxt').textContent = got===LEVELS.length ? `🏆 全部通關！${got} / ${LEVELS.length} 關都全對過` : `🏅 全對收集 ${got} / ${LEVELS.length}`;
+  $('collectFill').style.width = (got/LEVELS.length*100)+'%';
+  $('btnGrand').style.display = badges._grand ? '' : 'none';
   document.querySelectorAll('.lv-card').forEach(b=>b.onclick=()=>{ allMode=false; startLevel(+b.dataset.i); });
 }
 function show(id){ document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('active', s.id===id)); window.scrollTo(0,0); }
@@ -704,13 +748,26 @@ function nextQ(){
   $('cert').style.display = allRight ? '' : 'none';
   if(allRight){
     rec.cert = true; saveAll(sessions);
+    if(!badges[LEVELS[li].id]){ badges[LEVELS[li].id]=Date.now(); saveBadges(); }
     $('certN').textContent = qs.length;
     $('certLv').textContent = `第${li+1}關「${LEVELS[li].name}」`;
     $('certDate').textContent = fmtTime(Date.now()).split(' ')[0];
     $('endMsg').textContent = '全部答對！你拿到一張獎狀 🏅';
     say('哇！全部答對！你拿到一張獎狀，拿給阿嬤看，可以領獎喔！');
   } else say(`第${li+1}關完成，你很棒！`);
+  const got=LEVELS.filter(L=>badges[L.id]).length;
+  const justGrand = !badges._grand && got===LEVELS.length;
+  if(justGrand){ badges._grand=Date.now(); saveBadges(); }
+  $('collectEnd').textContent = got===LEVELS.length ? `🏆 ${LEVELS.length} 關全部全對！` : `🏅 全對收集 ${got} / ${LEVELS.length}，再加油！`;
+  $('btnGetGrand').style.display = justGrand ? '' : 'none';
+  if(justGrand){ $('btnNext').style.display='none'; setTimeout(()=>say(`哇！${LEVELS.length}關全部全對！按紅色按鈕，領你的通關證書！`), 3800); }
   show('end');
+}
+function showGrand(){
+  $('gN').textContent = LEVELS.length;
+  $('gDate').textContent = fmtTime(badges._grand||Date.now()).split(' ')[0];
+  show('grand');
+  say(`恭喜你！${LEVELS.length}關全部全對，通關成功！拿給阿嬤看，可以領大獎喔！`);
 }
 
 /* ========== 教學（第二次答錯時） ========== */
@@ -958,6 +1015,9 @@ function drawReport(s){
     <table class="rp"><tr><th></th><th>單元／觀念</th><th>答對</th><th>錯在哪</th></tr>${rows}</table>
     <div class="rp-focus">${focus}</div>
     ${(()=>{ const c=LEVELS.map((L,i)=>s.levels[L.id]&&s.levels[L.id].cert?`第${i+1}關 ${L.name}`:null).filter(Boolean); return c.length?`<div class="rp-focus" style="border-color:var(--green)">🏅 <b>拿到獎狀：</b>${c.join('、')}</div>`:''; })()}
+    ${(()=>{ const miss=LEVELS.map((L,i)=>badges[L.id]?null:`第${i+1}關 ${L.name}`).filter(Boolean);
+      return badges._grand ? `<div class="rp-focus" style="border-color:#E53935">🏆 <b>12 關全對收集完成，已通關</b>（${fmtTime(badges._grand)}）</div>`
+        : `<div class="rp-focus" style="border-color:var(--gold)">🏅 <b>全對收集 ${LEVELS.length-miss.length}/${LEVELS.length}</b>　還差：${miss.join('、')}</div>`; })()}
     <div class="rp-note">錯了沒關係，陪他再試一次就好 😊　—— SUNNY 魔法數學</div>`;
   $('hist').innerHTML = sessions.length>1 ? '<b>以前的紀錄（點一下看）</b>' + sessions.slice().reverse().map((x,k)=>{
     const idx=sessions.length-1-k;
@@ -971,12 +1031,15 @@ $('btnAll').onclick=()=>{ allMode=true; const next=LEVELS.findIndex(L=>!(cur.lev
 $('btnSpk').onclick=()=>say(qs[qi].speech);
 $('btnQuit').onclick=()=>{ teachId++; speechSynthesis && speechSynthesis.cancel(); drawHome(); show('home'); };
 $('btnNext').onclick=()=>startLevel(li+1);
+$('btnGetGrand').onclick=showGrand;
+$('btnGrand').onclick=showGrand;
+$('btnGrandHome').onclick=()=>{ drawHome(); show('home'); };
 $('btnEndHome').onclick=()=>{ drawHome(); show('home'); };
 $('btnAdult').onclick=()=>{ drawReport(cur); show('report'); };
 $('btnRpHome').onclick=()=>{ drawHome(); show('home'); };
 $('btnNewSess').onclick=()=>{ if(confirm('要開始新的一次測驗嗎？（舊的紀錄會保留在下面）')){ newSession(); drawHome(); show('home'); } };
 drawHome();
-(()=>{ const im=new Image(); im.onload=()=>$('cert').classList.add('hasimg'); im.src='cert.jpg'; })();
+(()=>{ const im=new Image(); im.onload=()=>document.querySelectorAll('.cert').forEach(c=>c.classList.add('hasimg')); im.src='cert.jpg'; })();
 </script>
 </body>
 </html>
