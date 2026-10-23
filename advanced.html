@@ -387,7 +387,7 @@ if('speechSynthesis' in window){ loadVoice(); speechSynthesis.onvoiceschanged = 
 function say(t){
   if(!('speechSynthesis' in window)) return;
   speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(t);
+  const u = new SpeechSynthesisUtterance(t.replace(/只/g,"指"));   // 「只」語音會唸成ㄓ，改用「指」的音
   u.lang = 'zh-TW'; if(zhVoice) u.voice = zhVoice; u.rate = 0.75;
   speechSynthesis.speak(u);
 }
@@ -1119,7 +1119,7 @@ function sayWait(t){
     setTimeout(fin, 1200+t.length*560);              // 語音沒回應也會往下走
     if(!('speechSynthesis' in window)) return;
     speechSynthesis.cancel();
-    const u=new SpeechSynthesisUtterance(t); u.lang='zh-TW'; if(zhVoice) u.voice=zhVoice; u.rate=0.6;
+    const u=new SpeechSynthesisUtterance(t.replace(/只/g,"指")); u.lang='zh-TW'; if(zhVoice) u.voice=zhVoice; u.rate=0.6;
     u.onend=fin; u.onerror=fin; speechSynthesis.speak(u);
   });
 }
