@@ -273,7 +273,7 @@
           <div class="cert-title">獎　狀</div>
           <div class="cert-who">數學小勇士</div>
           <div class="cert-body">闖過 <b id="certLv"></b><br><span id="certN">5</span> 題全部答對！</div>
-          <div class="cert-gift">🎁 拿給阿嬤看，可以領獎喔！</div>
+          <div class="cert-gift">🎁 拿給姑婆看，可以領獎喔！</div>
         </div>
         <div class="cert-foot"><span id="certDate"></span><br>SUNNY 魔法數學</div>
       </div>
@@ -294,7 +294,7 @@
           <div class="cert-title">通關證書</div>
           <div class="cert-who">數學小勇士</div>
           <div class="cert-body">一年級數感闖關<br><b id="gN">12</b> 關全部全對！</div>
-          <div class="cert-gift">🎁 拿給阿嬤看，可以領大獎喔！</div>
+          <div class="cert-gift">🎁 拿給姑婆看，可以領大獎喔！</div>
         </div>
         <div class="cert-foot"><span id="gDate"></span><br>SUNNY 魔法數學</div>
       </div>
@@ -755,7 +755,7 @@ function nextQ(){
     $('certLv').textContent = `第${li+1}關「${LEVELS[li].name}」`;
     $('certDate').textContent = fmtTime(Date.now()).split(' ')[0];
     $('endMsg').textContent = '全部答對！你拿到一張獎狀 🏅';
-    say('哇！全部答對！你拿到一張獎狀，拿給阿嬤看，可以領獎喔！');
+    say('哇！全部答對！你拿到一張獎狀，拿給姑婆看，可以領獎喔！');
   } else say(`第${li+1}關完成，你很棒！`);
   const got=LEVELS.filter(L=>badges[L.id]).length;
   const justGrand = !badges._grand && got===LEVELS.length;
@@ -769,7 +769,7 @@ function showGrand(){
   $('gN').textContent = LEVELS.length;
   $('gDate').textContent = fmtTime(badges._grand||Date.now()).split(' ')[0];
   show('grand');
-  say(`恭喜你！${LEVELS.length}關全部全對，通關成功！拿給阿嬤看，可以領大獎喔！`);
+  say(`恭喜你！${LEVELS.length}關全部全對，通關成功！拿給姑婆看，可以領大獎喔！`);
 }
 
 /* ========== 教學（第二次答錯時） ========== */
