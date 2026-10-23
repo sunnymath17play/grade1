@@ -286,6 +286,35 @@
   .shrow{ display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-top:8px; }
   .shc{ background:#fff; border:2px solid #FFE0B2; border-radius:12px; padding:6px; text-align:center; font-size:14px; font-weight:800; max-width:110px; transition:opacity .4s; }
   .adv-link{ display:block; text-decoration:none; }
+
+  /* ---- v2：圖放大（手機看清楚） ---- */
+  .teach{ padding:10px 6px; }
+  .fixbox{ width:350px; padding:12px; gap:14px; } .ncard{ width:70px; height:84px; font-size:52px; }
+  .fixitems{ font-size:44px; gap:4px; } .fixitems .empty{ font-size:18px; }
+  .rows .r{ grid-template-columns:repeat(10,29px); font-size:27px; min-height:38px; }
+  .opt .basket{ flex-direction:row; flex-wrap:wrap; align-items:center; gap:4px 10px; }
+  .basket .brow{ font-size:27px; letter-spacing:0; min-height:32px; }
+  .bkts{ grid-template-columns:1fr; } .bkts .basket{ flex-direction:row; flex-wrap:wrap; gap:4px 10px; align-items:center; }
+  .bkts .basket .brow{ font-size:23px; }
+  .need{ font-size:22px; }
+  .lpart svg{ width:280px; height:210px; }
+  .queue{ font-size:31px; gap:1px; padding:8px 4px; } .queue .shop{ font-size:36px; }
+  .race{ width:350px; } .lane{ height:50px; } .lane .rn{ font-size:36px; }
+  .ring{ width:150px; height:96px; font-size:28px; } .outb{ font-size:28px; min-height:36px; }
+  .tenf{ grid-template-columns:repeat(5,58px); } .tenf div{ height:58px; font-size:38px; }
+  .bb{ width:64px; height:64px; font-size:38px; }
+  .plate2{ font-size:38px; }
+  .dot{ width:30px; height:30px; }
+  .sface{ font-size:44px; line-height:48px; height:48px; } .headline{ top:62px; } .stepwrap{ width:320px; }
+  .numrow div{ width:58px; height:64px; font-size:34px; }
+  .shc{ max-width:150px; font-size:15px; }
+  .solid svg{ width:200px; height:167px; }
+
+  .rows{ padding:6px; } .rows .r{ grid-template-columns:repeat(10,31px); font-size:30px; min-height:40px; }
+  .teach .race{ width:318px; }
+  .teach .rows .r{ grid-template-columns:repeat(10,30px); font-size:29px; }
+  .teach .queue{ transform:scale(.9); }
+  .queue.q8{ font-size:26px; } .queue.q7{ font-size:29px; }
 </style>
 </head>
 <body>
@@ -302,7 +331,7 @@
     <div class="lv-grid" id="lvGrid"></div>
     <button class="adult-btn" id="btnAdult">📋 大人看結果</button>
     <a class="adult-btn adv-link" href="./">⬅ 回基礎版數感闖關</a>
-    <div style="text-align:center;font-size:12px;color:#C9A57A;margin-top:4px">進階版 v1</div>
+    <div style="text-align:center;font-size:12px;color:#C9A57A;margin-top:4px">進階版 v2</div>
   </section>
 
   <!-- 遊戲 -->
@@ -722,7 +751,7 @@ function genBuy(){
   const bk=b=>`<div class="basket">${its.map((it,i)=>`<div class="brow">${Array(b.c[i]).fill(it[0]).join('')}</div>`).join('')}</div>`;
   return { prompt:`小陽說：「我買了 ${its.map((it,i)=>`${cs[i]} ${it[1]}${it[0]}`).join('、')}。」<br>哪一籃是小陽買的？`,
     speech:`小陽說，我買了${its.map((it,i)=>`${cs[i]}${it[1]}${it[2]}`).join('、')}。哪一籃是小陽買的？`,
-    visual:'', options:baskets.map((b,i)=>({label:`<b>${AB[i]}</b>`+bk(b),value:b.v,html:true})), cols:3, answer:'ok',
+    visual:'', options:baskets.map((b,i)=>({label:`<div class="basket"><b style="font-size:22px">${AB[i]}</b>${its.map((it,j)=>`<div class="brow">${Array(b.c[j]).fill(it[0]).join('')}</div>`).join('')}</div>`,value:b.v,html:true})), cols:1, answer:'ok',
     t:{type:'buy',its,cs,baskets}, detail:v=>v==='w1'?'選了數量對調的籃子（沒對好哪一種幾個）':'選了差 1 個的籃子（數錯一個）' };
 }
 
@@ -736,7 +765,7 @@ function ropePath(k,y){
 }
 function ropeSvg(kinds,ask){
   const road=ask==='road';
-  return `<svg viewBox="0 0 300 190" width="300" height="190"><line x1="30" y1="4" x2="30" y2="186" stroke="#9E9E9E" stroke-dasharray="5 4" stroke-width="2"/><line x1="270" y1="4" x2="270" y2="186" stroke="#9E9E9E" stroke-dasharray="5 4" stroke-width="2"/>`+
+  return `<svg viewBox="0 0 300 190" width="345" height="218"><line x1="30" y1="4" x2="30" y2="186" stroke="#9E9E9E" stroke-dasharray="5 4" stroke-width="2"/><line x1="270" y1="4" x2="270" y2="186" stroke="#9E9E9E" stroke-dasharray="5 4" stroke-width="2"/>`+
     kinds.map((k,i)=>`<path d="${ropePath(k,ROPEY[i])}" stroke="${ROPEC[i][0]}" stroke-width="5" fill="none" stroke-linecap="round"/>`).join('')+
     ROPEY.map(y=>road?`<text x="2" y="${y+8}" font-size="22">🐜</text><text x="274" y="${y+8}" font-size="20">🍬</text>`:`<circle cx="30" cy="${y}" r="5" fill="#4A3728"/><circle cx="270" cy="${y}" r="5" fill="#4A3728"/>`).join('')+`</svg>`;
 }
@@ -785,7 +814,7 @@ function genLinePart(i){
 }
 
 /* 7 排隊結帳：第幾個、前面幾個、後面幾個 */
-const queueHTML=row=>`<div class="queue">${row.slice().reverse().map(a=>`<span>${a}</span>`).join('')}<span class="shop">🏪</span></div><div class="qlabel">⬅ 後面　　　　　前面 ➡ 櫃台</div>`;
+const queueHTML=row=>`<div class="queue q${row.length}">${row.slice().reverse().map(a=>`<span>${a}</span>`).join('')}<span class="shop">🏪</span></div><div class="qlabel">⬅ 後面　　　　　前面 ➡ 櫃台</div>`;
 function genQueue(kind){
   const n=rnd(6,8), row=sample(Object.keys(ANAME),n), k=rnd(2,n-1), who=row[k-1], wn=ANAME[who];
   const P={ total:[`排隊結帳，全部有幾隻動物在排隊？`,`排隊結帳，全部有幾隻動物在排隊？`,n],
@@ -918,7 +947,7 @@ const SH2={ tri:['三角形','<path d="M35 6 L64 56 L6 56Z" fill="#FFE082" strok
   sq:['正方形','<rect x="11" y="6" width="48" height="48" fill="#FFE082" stroke="#F57F17" stroke-width="3"/>'],
   rect:['長方形','<rect x="2" y="16" width="66" height="30" fill="#FFE082" stroke="#F57F17" stroke-width="3"/>'],
   ci:['圓形','<circle cx="35" cy="31" r="25" fill="#FFE082" stroke="#F57F17" stroke-width="3"/>'] };
-const sh2Svg=k=>`<svg viewBox="0 0 70 60" width="70" height="60">${SH2[k][1]}</svg>`;
+const sh2Svg=k=>`<svg viewBox="0 0 70 60" width="88" height="75">${SH2[k][1]}</svg>`;
 const FACES={cube:['sq'],box:['rect'],can:['ci'],prism:['tri','rect']};
 const SOLNM={cube:'方方的盒子',box:'扁扁的長盒子',can:'圓罐',canL:'躺著的圓罐',prism:'三角形的盒子',ball:'球'};
 const FACE_SAY={cube:'每一個面都是<b>正方形</b>',box:'每一個面都是<b>長方形</b>',can:'上面、下面是<b>圓形</b>；旁邊彎彎的，不能描',prism:'前面、後面是<b>三角形</b>；旁邊是<b>長方形</b>'};
@@ -933,10 +962,10 @@ function genSolid(kind){
   }
   if(kind==='roll'){ const r=pick(['ball','canL']), opts=shuffle([r,...sample(['cube','box','prism'],2)]);
     return { prompt:'哪一個最容易<b style="color:#E8590C">滾動</b>？', speech:'哪一個最容易滾動？', visual:'',
-      options:opts.map(k=>({label:solidSvg(k,90),value:k,html:true})), cols:3, answer:r, t:{type:'solid',kind,opts,ans:r}, detail:v=>`最會滾 選了${SOLNM[v]}` }; }
+      options:opts.map(k=>({label:solidSvg(k,105),value:k,html:true})), cols:3, answer:r, t:{type:'solid',kind,opts,ans:r}, detail:v=>`最會滾 選了${SOLNM[v]}` }; }
   const opts=shuffle(['ball',...sample(['cube','box','can'],2)]);
   return { prompt:'哪一個<b style="color:#E8590C">不能</b>疊高？', speech:'哪一個不能疊高？', visual:'',
-    options:opts.map(k=>({label:solidSvg(k,90),value:k,html:true})), cols:3, answer:'ball', t:{type:'solid',kind,opts,ans:'ball'}, detail:v=>`不能疊高 選了${SOLNM[v]}` };
+    options:opts.map(k=>({label:solidSvg(k,105),value:k,html:true})), cols:3, answer:'ball', t:{type:'solid',kind,opts,ans:'ball'}, detail:v=>`不能疊高 選了${SOLNM[v]}` };
 }
 
 /* 14 數形狀：形狀組成的火車 */
@@ -946,8 +975,8 @@ function genTrain(){
   const els=[], add=(k,svg)=>els.push({k,svg}), cars=rnd(1,2);
   add('rect','<rect x="10" y="95" width="80" height="36" fill="#EF9A9A"/>');
   add('sq','<rect x="55" y="61" width="34" height="34" fill="#FFCC80"/>');
-  add('rect','<rect x="20" y="70" width="12" height="25" fill="#BCAAA4"/>');
-  [[26,56,6],[36,40,8],[50,23,10]].slice(0,rnd(1,3)).forEach(([x,y,r])=>add('ci',`<circle cx="${x}" cy="${y}" r="${r}" fill="#E0E0E0"/>`));
+  add('rect','<rect x="16" y="64" width="16" height="31" fill="#BCAAA4"/>');
+  [[24,52,9],[38,32,11],[58,14,13]].slice(0,rnd(1,3)).forEach(([x,y,r])=>add('ci',`<circle cx="${x}" cy="${y}" r="${r}" fill="#E0E0E0"/>`));
   [30,70].forEach(x=>add('ci',`<circle cx="${x}" cy="140" r="10" fill="#90A4AE"/>`));
   for(let c=0;c<cars;c++){ const x=100+c*100;
     add('rect',`<rect x="${x}" y="100" width="90" height="31" fill="#A5D6A7"/>`);
@@ -957,7 +986,7 @@ function genTrain(){
   }
   return els;
 }
-const trainSvg=els=>`<svg viewBox="0 0 300 160" width="300" height="160"><g stroke="#4A3728" stroke-width="2.5">${els.map(e=>e.svg.replace('/>',` data-k="${e.k}"/>`)).join('')}</g></svg>`;
+const trainSvg=els=>`<svg viewBox="0 0 300 160" width="345" height="184"><g stroke="#4A3728" stroke-width="2.5">${els.map(e=>e.svg.replace('/>',` data-k="${e.k}"/>`)).join('')}</g></svg>`;
 function genShapes(k){
   let els; const cnt=k2=>els.filter(e=>e.k===k2).length;
   do{ els=genTrain(); }while(cnt(k)<1);
@@ -1474,7 +1503,7 @@ Object.assign(TEACH,{
       vis.querySelectorAll('.shc').forEach(c=>{ if(c.dataset.k===ans) c.classList.add('ans'); else c.style.opacity='.3'; });
       await S(`所以可以描出 <b>${SH2[ans][0]}</b>！`); return;
     }
-    vis.innerHTML=`<div class="shrow">${opts.map(k=>`<div class="shc" data-k="${k}" style="visibility:hidden">${solidSvg(k,80)}<div>${ROLL_SAY[k]}</div></div>`).join('')}</div>`;
+    vis.innerHTML=`<div class="shrow">${opts.map(k=>`<div class="shc" data-k="${k}" style="visibility:hidden">${solidSvg(k,95)}<div>${ROLL_SAY[k]}</div></div>`).join('')}</div>`;
     for(const c of vis.querySelectorAll('.shc')){ c.style.visibility='visible'; await S(`${SOLNM[c.dataset.k]}：${ROLL_SAY[c.dataset.k]}`); }
     vis.querySelector(`.shc[data-k="${ans}"]`).classList.add('ans');
     await S(kind==='roll'?`${SOLNM[ans]}有<b>彎彎的面</b>，最容易滾！`:'球全部都是彎彎的面，放不穩，<b>不能疊高</b>！');
