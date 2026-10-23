@@ -315,6 +315,33 @@
   .teach .rows .r{ grid-template-columns:repeat(10,30px); font-size:29px; }
   .teach .queue{ transform:scale(.9); }
   .queue.q8{ font-size:26px; } .queue.q7{ font-size:29px; }
+
+  /* ---- v3 ---- */
+  #stage.qside{ display:grid; grid-template-columns:auto 1fr; gap:12px; align-items:start; }
+  #stage.qside .visual{ margin:0; } #stage.qside .opts{ gap:8px; } #stage.qside .opt{ min-height:56px; }
+  .qcol{ display:flex; flex-direction:column; align-items:center; background:#fff; border-radius:14px; padding:4px 10px; }
+  .qcol .qa{ font-size:40px; line-height:46px; position:relative; border-radius:10px; }
+  .qtop{ font-size:16px; font-weight:900; color:var(--deep); background:#FFF3D9; border-radius:8px; padding:2px 8px; }
+  .qfront,.qback{ font-size:13px; font-weight:800; color:#B0742A; }
+  .teach .qcol .qa{ font-size:36px; line-height:41px; }
+  .basket .brow{ font-size:31px; } .bkts .basket .brow{ font-size:27px; }
+  .ring{ width:158px; height:104px; font-size:32px; } .outb{ font-size:32px; }
+  .help-btn{ display:block; margin:14px auto 0; padding:12px 18px; border-radius:16px; font-size:19px; font-weight:900; color:#6A1B9A; background:#F3E5F5; border:3px solid #CE93D8; box-shadow:0 4px 0 rgba(106,27,154,.25); }
+  .explain{ border-color:#AB47BC; } .explain .t-title{ color:#8E24AA; }
+  .ex-vis{ display:flex; flex-direction:column; align-items:center; gap:8px; }
+
+  .race .flag{ font-size:30px; right:-2px; } .race{ padding-right:40px; }
+  .qfront,.qback{ font-size:15px; }
+  .teach .fixbox{ width:100%; } .teach .basket{ width:auto; }
+  .bkts{ width:100%; padding:0 2px; }
+  .teach svg{ max-width:100%; height:auto; }
+
+  .qcol .qa{ font-size:46px; line-height:52px; } .teach .qcol .qa{ font-size:42px; line-height:47px; }
+  .lane{ height:56px; } .lane .rn{ font-size:42px; top:5px; }
+  #stage.raceq .opt{ font-size:38px; min-height:64px; padding:0; }
+  .exopts{ display:grid; gap:8px; width:100%; pointer-events:none; } .exopts .opt{ display:flex; flex-direction:column; align-items:center; justify-content:center; padding:4px; font-size:18px; }
+  .teach .exopts .opt{ font-size:30px; }
+  .exopts .opt.bigopt{ font-size:40px; min-height:70px; }
 </style>
 </head>
 <body>
@@ -331,7 +358,7 @@
     <div class="lv-grid" id="lvGrid"></div>
     <button class="adult-btn" id="btnAdult">📋 大人看結果</button>
     <a class="adult-btn adv-link" href="./">⬅ 回基礎版數感闖關</a>
-    <div style="text-align:center;font-size:12px;color:#C9A57A;margin-top:4px">進階版 v2</div>
+    <div style="text-align:center;font-size:12px;color:#C9A57A;margin-top:4px">進階版 v3</div>
   </section>
 
   <!-- 遊戲 -->
@@ -344,6 +371,7 @@
     <div class="prompt"><button class="spk" id="btnSpk">🔊</button><div id="promptTxt"></div></div>
     <div id="stage"></div>
     <div class="feedback" id="fb"></div>
+    <button class="help-btn" id="btnHelp">🤔 我看不懂題目意思</button>
   </section>
 
   <!-- 關卡結束 -->
@@ -767,7 +795,7 @@ function ropeSvg(kinds,ask){
   const road=ask==='road';
   return `<svg viewBox="0 0 300 190" width="345" height="218"><line x1="30" y1="4" x2="30" y2="186" stroke="#9E9E9E" stroke-dasharray="5 4" stroke-width="2"/><line x1="270" y1="4" x2="270" y2="186" stroke="#9E9E9E" stroke-dasharray="5 4" stroke-width="2"/>`+
     kinds.map((k,i)=>`<path d="${ropePath(k,ROPEY[i])}" stroke="${ROPEC[i][0]}" stroke-width="5" fill="none" stroke-linecap="round"/>`).join('')+
-    ROPEY.map(y=>road?`<text x="2" y="${y+8}" font-size="22">🐜</text><text x="274" y="${y+8}" font-size="20">🍬</text>`:`<circle cx="30" cy="${y}" r="5" fill="#4A3728"/><circle cx="270" cy="${y}" r="5" fill="#4A3728"/>`).join('')+`</svg>`;
+    ROPEY.map(y=>road?`<text x="0" y="${y+10}" font-size="28">🐜</text><text x="271" y="${y+10}" font-size="27">🍬</text>`:`<circle cx="30" cy="${y}" r="5" fill="#4A3728"/><circle cx="270" cy="${y}" r="5" fill="#4A3728"/>`).join('')+`</svg>`;
 }
 function genRope(ask){
   const kinds=shuffle(['s','a','w']), ans= ask==='long'?kinds.indexOf('w'):kinds.indexOf('s');
@@ -814,14 +842,14 @@ function genLinePart(i){
 }
 
 /* 7 排隊結帳：第幾個、前面幾個、後面幾個 */
-const queueHTML=row=>`<div class="queue q${row.length}">${row.slice().reverse().map(a=>`<span>${a}</span>`).join('')}<span class="shop">🏪</span></div><div class="qlabel">⬅ 後面　　　　　前面 ➡ 櫃台</div>`;
+const queueHTML=row=>`<div class="qcol"><div class="qtop">🏪 櫃台</div><div class="qfront">⬆ 前面</div>${row.map(a=>`<span class="qa">${a}</span>`).join('')}<div class="qback">⬇ 後面</div></div>`;
 function genQueue(kind){
   const n=rnd(6,8), row=sample(Object.keys(ANAME),n), k=rnd(2,n-1), who=row[k-1], wn=ANAME[who];
   const P={ total:[`排隊結帳，全部有幾隻動物在排隊？`,`排隊結帳，全部有幾隻動物在排隊？`,n],
     pos:[`${who} 排在第幾個？<br><small>（最靠近櫃台🏪的是第 1 個）</small>`,`${wn}排在第幾個？最靠近櫃台的是第一個`,k],
     front:[`排在 ${who} <b style="color:#E8590C">前面</b>的有幾隻？`,`排在${wn}前面的有幾隻？`,k-1],
     back:[`排在 ${who} <b style="color:#E8590C">後面</b>的有幾隻？`,`排在${wn}後面的有幾隻？`,n-k] }[kind];
-  return { prompt:P[0], speech:P[1], visual:queueHTML(row), options:NUMS(1,10), cols:5, answer:P[2], t:{type:'queue',kind,row,n,k},
+  return { prompt:P[0], speech:P[1], visual:queueHTML(row), cls:'qside', options:NUMS(1,10), cols:2, answer:P[2], t:{type:'queue',kind,row,n,k},
     detail:v=>{ let tag='';
       if(kind==='front'&&v===k) tag='（把自己也算進去）'; if(kind==='back'&&v===n-k+1) tag='（把自己也算進去）';
       if(kind==='pos'&&v===n-k+1) tag='（從後面數）';
@@ -839,7 +867,7 @@ function genRace(kind){
   if(kind==='rank') return {...base, prompt:pre+`${an[ti]} 跑第幾名？`, speech:preS+`${ANAME[an[ti]]}跑第幾名？`, options:NUMS(1,5), cols:5, answer:r,
     detail:v=>`${an[ti]}第${r}名 答${v}${v===6-r&&v!==r?'（看反方向）':''}`};
   if(kind==='who') return {...base, prompt:pre+`跑<b style="color:#E8590C">第 ${k} 名</b>的是誰？`, speech:preS+`跑第${k}名的是誰？`,
-    options:an.map((a,i)=>({label:a,value:i})), cols:5, answer:wi, detail:v=>`第${k}名 點到第${rank(v)}名${rank(v)===6-k&&k!==3?'（看反方向）':''}`};
+    options:an.map((a,i)=>({label:a,value:i})), cols:5, cls:'raceq', answer:wi, detail:v=>`第${k}名 點到第${rank(v)}名${rank(v)===6-k&&k!==3?'（看反方向）':''}`};
   return {...base, prompt:pre+`跑在 ${an[ti]} <b style="color:#E8590C">前面</b>的有幾隻？`, speech:preS+`跑在${ANAME[an[ti]]}前面的有幾隻？`,
     options:NUMS(0,4), cols:5, answer:r-1, detail:v=>`${an[ti]}第${r}名 前面${r-1}隻 答${v}${v===r?'（把自己算進去）':''}`};
 }
@@ -1048,17 +1076,17 @@ let allMode=false, li=0, qs=[], qi=0, tries=0, rec=null, busy=false;
 
 function startLevel(i){
   li=i; const L=LEVELS[i]; qs=L.make(); qi=0;
-  rec = cur.levels[L.id] = { first:0, done:0, wrong:[], total:qs.length }; saveAll(sessions);
+  rec = cur.levels[L.id] = { first:0, done:0, wrong:[], help:0, total:qs.length }; saveAll(sessions);
   $('lvName').textContent = `第${i+1}關 ${L.name}`;
   show('game'); showQ();
 }
 function drawDots(){ $('dots').innerHTML = qs.map((_,i)=>`<span class="${i<qi?'done':''}"></span>`).join(''); }
 
 function showQ(){
-  const q=qs[qi]; tries=0; busy=false;
+  const q=qs[qi]; tries=0; busy=false; $('btnHelp').style.display='';
   drawDots();
   $('promptTxt').innerHTML=q.prompt; $('fb').textContent=''; $('fb').className='feedback';
-  const stage=$('stage'); stage.className = q.ord?'ord':(q.shapes?'shapes':(q.vert?'vert':'')); stage.innerHTML='';
+  const stage=$('stage'); stage.className = q.ord?'ord':(q.shapes?'shapes':(q.vert?'vert':'')); if(q.cls) stage.classList.add(q.cls); stage.innerHTML='';
   if(q.custom){ (q.build||buildTake)(q, stage, v=>answer(v,null)); say(q.speech); return; }
   const vis=document.createElement('div'); vis.className='visual'; vis.innerHTML=q.visual;
   if(q.visual) stage.appendChild(vis);
@@ -1155,6 +1183,7 @@ function sayWait(t){
 const badge=(el,n)=>el.insertAdjacentHTML('beforeend',`<i class="badge">${n}</i>`);
 let teachId=0;
 async function teach(q){
+  $('btnHelp').style.display='none';
   const my=++teachId;
   const alive=()=>my===teachId && $('game').classList.contains('active');
   const stage=$('stage'); stage.className='';
@@ -1423,7 +1452,7 @@ Object.assign(TEACH,{
   },
   async queue({kind,row,n,k},vis,S){
     vis.innerHTML=queueHTML(row);
-    const sp=[...vis.querySelectorAll('.queue span:not(.shop)')].reverse(), who=sp[k-1], wn=ANAME[row[k-1]];
+    const sp=[...vis.querySelectorAll('.qcol .qa')], who=sp[k-1], wn=ANAME[row[k-1]];
     if(kind==='total'){ await S('一隻一隻數，不要漏掉', '一隻一隻鼠，不要漏掉');
       for(let i=0;i<n;i++){ sp[i].classList.add('lit'); badge(sp[i],i+1); await S(`${i+1}`); }
       await S(`全部有 <b>${n}</b> 隻！`); return; }
@@ -1537,7 +1566,7 @@ function drawReport(s){
   const rows = LEVELS.map((L,i)=>{
     const r=s.levels[L.id]; const [cls,,icon]=statusOf(r);
     const sc = r && r.done ? `${r.first}/${r.done}` : '';
-    const wr = r && r.wrong.length ? r.wrong.slice(0,2).join('<br>') : (r&&r.done?'—':'');
+    const wr = (r && r.wrong.length ? r.wrong.slice(0,2).join('<br>') : (r&&r.done?'—':'')) + (r&&r.help?`<br>🤔 看不懂題目 ${r.help} 次`:'');
     return `<tr class="${cls}"><td class="st">${icon}</td><td><span class="u">${L.unit.split(" ")[0]}</span>${i+1}. ${L.name}：${L.concept}</td><td class="sc">${sc}</td><td class="wr">${wr}</td></tr>`;
   }).join('');
   let focus;
@@ -1563,6 +1592,68 @@ function drawReport(s){
     return `<div class="${x===s?'cur':''}" data-k="${idx}">${fmtTime(x.start)}　${icons}</div>`; }).join('') : '';
   document.querySelectorAll('#hist div[data-k]').forEach(d=>d.onclick=()=>drawReport(sessions[+d.dataset.k]));
 }
+
+
+/* ========== 我看不懂題目意思：解釋題意（不講答案），換一題、不算分 ========== */
+['genFind','genFix','genBuy','genRope','genStep','genLinePart','genQueue','genRace','genSeq2','genWord','genBond2','genTen','genSolid','genShapes'].forEach(n=>{
+  const f=window[n]; window[n]=function(...a){ const q=f(...a); const one = n==='genLinePart' ? ()=>{ let j; do{ j=rnd(0,LPART.length-1); }while(j===a[0]); return window[n](j); } : ()=>window[n](...a);
+    q.regen=()=>{ let r, c=0; do{ r=one(); }while(JSON.stringify(r.t)===JSON.stringify(q.t) && ++c<20); return r; }; return q; };
+});
+const SN=s=>s.replace(/<[^>]+>/g,'');
+const EXPLAIN={
+  find:t=>[['圖裡有<b>很多種</b>動物混在一起'],[`題目只問 ${t.em}，<b>別的都不要數</b>`,'題目只問一種，別的都不要鼠'],[`把 ${t.em} 一個一個找出來，數一數有幾個`,'把牠一個一個找出來，鼠一鼠有幾個']],
+  fix:t=>[[`數字 <b>${t.N}</b>，就是要 ${t.N} 個`],[`看看圖上有幾個 ${t.em}，和 ${t.N} 比一比`,`看看圖上有幾個，和${t.N}比一比`],['<b>太多</b>了就劃掉，<b>太少</b>了就補上，<b>一樣</b>就不用動']],
+  buy:t=>[['小陽說了他買的東西，和每一樣<b>買幾個</b>'],['三個籃子裡，只有<b>一籃</b>每一樣的數量都和他說的一樣'],['一籃一籃對對看，找出那一籃']],
+  rope:t=>t.ask==='road'?[['三隻螞蟻都從<b>左邊</b>出發，要走到<b>右邊</b>的糖果'],['題目問：走<b>哪一條路</b>最近、最快到？']]
+    :[['三條繩子，頭和尾都在<b>虛線</b>上，一樣的地方'],[`題目問：如果把繩子<b>拉直</b>，哪一條最${t.ask==='long'?'長':'短'}？`]],
+  step:t=>[['大家的頭看起來<b>一樣高</b>'],['可是看看腳下：有的站在<b>箱子</b>上，被墊高了'],[`題目問：如果大家都站在<b>地上</b>，誰${t.ems.length===2?'比較':'最'}${t.tall?'高':'矮'}？`]],
+  lpart:t=>[['<b>只看藍色</b>的那一段','只看藍色的那一段'],['直直的叫<b>直線</b>，彎彎的叫<b>曲線</b>'],['藍色那一段是哪一種？']],
+  queue:t=>{ const w=t.row[t.k-1], wn=ANAME[w];
+    const base=[['大家在<b>櫃台</b>前面排隊結帳，櫃台在最上面']];
+    if(t.kind==='total') return base.concat([['題目問：<b>全部</b>有幾隻動物在排隊？']]);
+    if(t.kind==='pos') return base.concat([['最靠近櫃台的是<b>第 1 個</b>，往下是第 2 個、第 3 個…','最靠近櫃台的是第一個，往下是第二個、第三個'],[`題目問：${w} 排在第幾個？`,`題目問：${wn}排在第幾個？`]]);
+    if(t.kind==='front') return base.concat([[`${w} 的<b>前面</b>，就是比牠<b>更靠近櫃台</b>的`,`${wn}的前面，就是比牠更靠近櫃台的`],['<b>自己不算</b>喔！數一數前面有幾隻','自己不算喔！鼠一鼠前面有幾隻']]);
+    return base.concat([[`${w} 的<b>後面</b>，就是在牠<b>下面</b>、離櫃台比較遠的`,`${wn}的後面，就是在牠下面、離櫃台比較遠的`],['<b>自己不算</b>喔！數一數後面有幾隻','自己不算喔！鼠一鼠後面有幾隻']]); },
+  race:t=>{ const a=t.an[t.ti], an=ANAME[a];
+    const base=[['大家往<b>右邊</b>跑，紅線🏁是<b>終點</b>','大家往右邊跑，紅線是終點'],['<b>最靠近終點</b>的跑最快，是<b>第 1 名</b>','最靠近終點的跑最快，是第一名']];
+    if(t.kind==='rank') return base.concat([[`題目問：${a} 跑第幾名？`,`題目問：${an}跑第幾名？`]]);
+    if(t.kind==='who') return base.concat([[`題目問：跑<b>第 ${t.k} 名</b>的是誰？`]]);
+    return base.concat([[`跑在 ${a} <b>前面</b>，就是比牠<b>更靠近終點</b>的`,`跑在${an}前面，就是比牠更靠近終點的`],['<b>自己不算</b>喔！','自己不算喔']]); },
+  seq2:t=>[['這是數字排隊，空格和問號都是被藏起來的數字'],['先看看：數字是越來越<b>大</b>，還是越來越<b>小</b>？','先看看，數字是越來越大，還是越來越小？'],['照著順序，想想<b>問號</b>是多少','照著順序，想想問號是多少']],
+  more:t=>{ const intro=[`題目說有 ${t.a} 隻 ${t.e1}，和 ${t.b} 隻 ${t.e2}`,`題目說有${t.a}隻${t.n1}，和${t.b}隻${t.n2}`];
+    if(t.kind==='which') return [intro,[`問哪一種比較<b>${t.less?'少':'多'}</b>`],['可以在紙上畫圈圈，<b>一個對一個</b>配配看']];
+    return [intro,['問<b>多幾隻</b>：一個對一個配好，<b>多出來、沒配到</b>的有幾隻？','問多幾隻，一個對一個配好，多出來、沒配到的有幾隻？']]; },
+  enough:t=>[[`每一個都要拿 <b>1 個</b>${t.itn}`],[`題目問：${t.itn}夠不夠<b>每一個都拿到</b>？`],['可以畫圈圈，一個對一個發發看']],
+  short:t=>[[`每一個都要拿 <b>1 個</b>${t.itn}`],[`${t.itn}不夠分，題目問：<b>還少幾個</b>，才夠每一個都拿到？`],['可以畫圈圈，一個對一個發發看']],
+  bond:t=> t.unk==='total'?[['兩個框框裡的數<b>合起來</b>，就是問號'],['題目問：合起來是多少？']]
+    :[[`全部是 <b>${t.total}</b>，分成兩邊`],['已經知道<b>一邊</b>是多少，問號是<b>另一邊</b>'],['兩邊合起來要剛好是全部']],
+  sand:t=>[['丟了<b>兩次</b>沙包'],['題目問：兩次總共有幾個丟<b>進圈圈裡面</b>？'],['掉在圈圈<b>外面</b>的沒丟進，<b>不算</b>']],
+  ten:t=>[['<b>10</b> 個格子全部裝滿，就是 10','十個格子全部裝滿，就是十'],[`已經有 <b>${t.a}</b> 個`],['題目問：還要<b>幾個</b>，才會剛好裝滿 10？','題目問，還要幾個，才會剛好裝滿十？']],
+  solid:t=> t.kind==='trace'?[['把積木的一個<b>平平的面</b>貼在紙上'],['拿筆沿著邊<b>描一圈</b>'],['題目問：會畫出哪一個形狀？']]
+    : t.kind==='roll'?[['把它們放在桌上，<b>輕輕推一下</b>'],['題目問：哪一個最容易<b>滾來滾去</b>？']]
+    :[['疊高，就是一個一個<b>往上放</b>'],['題目問：哪一個放上去會<b>滾掉</b>，不能疊？']],
+  shapes:t=>[['火車是用很多<b>形狀</b>拼起來的'],[`題目只問 <b>${SHN[t.k]}</b>，別的不要數`,`題目只問${SHN[t.k]}，別的不要鼠`],[SHAPE_HINT[t.k]]],
+};
+async function explain(){
+  if(busy) return;
+  const q=qs[qi], my=++teachId; busy=true;
+  const alive=()=>my===teachId && $('game').classList.contains('active');
+  rec.help=(rec.help||0)+1; saveAll(sessions);
+  $('btnHelp').style.display='none'; $('fb').textContent='';
+  const stage=$('stage'); stage.className='';
+  stage.innerHTML=`<div class="teach explain"><div class="t-title">🤔 題目是這個意思</div><div class="ex-vis" id="tVis">${q.visual||''}${q.options.some(o=>o.html)||q.big||q.cls==='raceq'?`<div class="exopts" style="grid-template-columns:repeat(${q.cols},1fr)">${q.options.map(o=>`<div class="opt${q.big?' bigopt':''}">${o.label}</div>`).join('')}</div>`:''}</div><div class="t-say" id="tSay"></div></div>
+    <div class="t-btns" id="tBtns" style="visibility:hidden"><button id="tAgain">🔁 再聽一次</button><button id="tNext">👍 我懂了，換一題</button></div>`;
+  const lines=(EXPLAIN[q.t.type]||(()=>[[SN(q.prompt)]]))(q.t);
+  for(const [txt,sp] of lines){ if(!alive()) return; $('tSay').innerHTML=txt; await sayWait(sp||SN(txt)); }
+  if(!alive()) return;
+  $('tSay').innerHTML='換一題一樣的，你自己試試看！💪'; await sayWait('換一題一樣的，你自己試試看');
+  if(!alive()) return;
+  $('tBtns').style.visibility='visible';
+  $('tAgain').onclick=()=>{ busy=false; rec.help--; explain(); };
+  $('tNext').onclick=()=>{ teachId++; if('speechSynthesis' in window) speechSynthesis.cancel();
+    if(q.regen) qs[qi]=q.regen(); busy=false; showQ(); };
+}
+$('btnHelp').onclick=explain;
 
 /* ========== 按鈕 ========== */
 $('btnAll').onclick=()=>{ allMode=true; const next=LEVELS.findIndex(L=>!(cur.levels[L.id] && cur.levels[L.id].done>=(cur.levels[L.id].total||5))); startLevel(next<0?0:next); };
