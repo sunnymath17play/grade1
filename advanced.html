@@ -235,6 +235,8 @@
   /* ---- 進階挑戰 ---- */
   .adv-title{ color:#C62828; }
   .countbox span.dim{ opacity:.18; }
+  .countbox.findbox{ width:350px; height:276px; } .countbox.findbox span{ font-size:50px; }
+  .teach .countbox.findbox{ transform:scale(.87); transform-origin:top center; margin-bottom:-36px; }
   .fixbox{ display:flex; align-items:center; gap:12px; background:#fff; border-radius:16px; padding:10px 12px; width:310px; }
   .ncard{ flex:none; width:58px; height:68px; border-radius:12px; background:#E3F2FD; border:3px solid var(--blue); font-size:40px; font-weight:900; color:var(--blue); display:flex; align-items:center; justify-content:center; }
   .fixitems{ display:flex; flex-wrap:wrap; gap:2px; font-size:28px; } .fixitems .empty{ font-size:16px; color:#9A8570; }
@@ -684,10 +686,10 @@ function genFind(){
   let cs; do{ cs=kinds.map(()=>rnd(2,7)); }while(cs.reduce((a,b)=>a+b)>20 || new Set(cs).size<3);
   const cells=shuffle(range(0,19)); const items=[]; let c=0;
   kinds.forEach((k,ki)=>{ for(let j=0;j<cs[ki];j++){ const cell=cells[c++];
-    items.push({em:k[0],cell,x:12+(cell%5)*56+rnd(-5,5),y:8+Math.floor(cell/5)*47+rnd(-4,4)}); } });
+    items.push({em:k[0],cell,x:8+(cell%5)*68+rnd(-4,4),y:8+Math.floor(cell/5)*66+rnd(-4,4)}); } });
   const ti=rnd(0,2), [em,nm,ql]=kinds[ti], n=cs[ti];
   return { prompt:`${em} 有幾${ql}？`, speech:`${nm}有幾${ql}？只鼠${nm}喔`,
-    visual:`<div class="countbox">${items.map(o=>`<span style="left:${o.x}px;top:${o.y}px">${o.em}</span>`).join('')}</div>`,
+    visual:`<div class="countbox findbox">${items.map(o=>`<span style="left:${o.x}px;top:${o.y}px">${o.em}</span>`).join('')}</div>`,
     options:NUMS(1,10), cols:5, answer:n, t:{type:'find',items,em,n},
     detail:v=>`只數${em}（${n}）答${v}${cs.includes(v)&&v!==n?'（數到別種）':(Math.abs(v-n)===1?'（漏數或重複數）':'')}` };
 }
@@ -1325,7 +1327,7 @@ const TEACH={
 /* ========== 進階題的教學（答錯第二次／兩選項錯一次） ========== */
 Object.assign(TEACH,{
   async find({items,em,n},vis,S){
-    vis.innerHTML=`<div class="countbox">${items.map(o=>`<span style="left:${o.x}px;top:${o.y}px" data-e="${o.em}" data-c="${o.cell}">${o.em}</span>`).join('')}</div>`;
+    vis.innerHTML=`<div class="countbox findbox">${items.map(o=>`<span style="left:${o.x}px;top:${o.y}px" data-e="${o.em}" data-c="${o.cell}">${o.em}</span>`).join('')}</div>`;
     const sp=[...vis.querySelectorAll('span')];
     await S(`只要數 ${em}，別的先不要看 👀`, '只要鼠我們要的，別的先不要看');
     sp.forEach(s=>{ if(s.dataset.e!==em) s.classList.add('dim'); });
